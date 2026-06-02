@@ -1,0 +1,4400 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>安心旅养演示前端</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f7f4;
+      --surface: #ffffff;
+      --surface-soft: #eef4ef;
+      --ink: #17201b;
+      --muted: #68726d;
+      --line: #dce4df;
+      --green: #245846;
+      --green-2: #3e7b5f;
+      --cyan: #0f6c7a;
+      --cyan-soft: #e7f5f6;
+      --teal: #217476;
+      --clay: #b76343;
+      --amber: #d59637;
+      --sky: #4d83a8;
+      --danger: #ad423a;
+      --shadow: 0 14px 40px rgba(36, 88, 70, 0.12);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(15, 108, 122, 0.28);
+      outline-offset: 2px;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: block;
+    }
+
+    .sidebar {
+      display: none !important;
+      background: #17251f;
+      color: #f9fbf8;
+      padding: 24px 18px;
+      flex-direction: column;
+      gap: 26px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: #d7eadb;
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      line-height: 1.2;
+      margin: 0;
+      font-weight: 750;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 4px;
+      color: #a9b8af;
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav button {
+      border: 0;
+      color: #d8e2dc;
+      background: transparent;
+      width: 100%;
+      height: 42px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      text-align: left;
+    }
+
+    .nav button.is-active {
+      background: #274337;
+      color: #ffffff;
+    }
+
+    .sidebar-card {
+      margin-top: auto;
+      background: #20372d;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .sidebar-card strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-card p {
+      margin: 0;
+      color: #b8c6bf;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 0 0 34px;
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .site-nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 66px;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 850;
+      min-width: 0;
+    }
+
+    .site-brand .brand-mark {
+      width: 38px;
+      height: 38px;
+    }
+
+    .site-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .site-links button {
+      border: 0;
+      background: transparent;
+      color: #3f5149;
+      border-radius: 8px;
+      height: 36px;
+      padding: 0 10px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .consumer-hero {
+      position: relative;
+      min-height: 450px;
+      color: #ffffff;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(17, 37, 29, 0.9), rgba(17, 37, 29, 0.66) 48%, rgba(17, 37, 29, 0.16)),
+        url("https://images.unsplash.com/photo-1576765607924-0f4f2b9fb7f2?auto=format&fit=crop&w=1800&q=80") center/cover;
+      background-color: #17251f;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 78px 24px 42px;
+      min-height: inherit;
+      display: grid;
+      align-content: end;
+      gap: 20px;
+    }
+
+    .hero-copy {
+      max-width: 980px;
+    }
+
+    .hero-copy h2 {
+      margin: 12px 0 12px;
+      font-size: 42px;
+      line-height: 1.08;
+      max-width: none;
+      white-space: nowrap;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.75;
+      font-size: 17px;
+      max-width: 680px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 850;
+      width: fit-content;
+    }
+
+    .hero-search {
+      background: rgba(255, 255, 255, 0.97);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      width: 100%;
+      max-width: 980px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+    }
+
+    .ai-field {
+      min-height: 72px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfb;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 11px 12px;
+      min-width: 0;
+    }
+
+    .ai-field i {
+      color: var(--green);
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    .ai-field label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+
+    .ai-field textarea {
+      width: 100%;
+      min-height: 42px;
+      max-height: 96px;
+      border: 0;
+      outline: 0;
+      resize: vertical;
+      background: transparent;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .hero-search .btn {
+      height: 72px;
+      min-width: 148px;
+      align-self: stretch;
+    }
+
+    .ai-examples {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ai-example {
+      border: 1px solid #d4e2dc;
+      background: #f6faf7;
+      color: #315547;
+      border-radius: 999px;
+      min-height: 30px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .intent-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 980px;
+    }
+
+    .intent-card {
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink);
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.16);
+    }
+
+    .intent-card h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .intent-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .intent-head {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .intent-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: #e6f2ec;
+      color: var(--green);
+    }
+
+    .intent-card:nth-child(2) .intent-icon {
+      background: var(--cyan-soft);
+      color: var(--cyan);
+    }
+
+    .intent-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .trust-strip,
+    .support-band,
+    .metrics,
+    .pathways,
+    .layout {
+      max-width: 1180px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .trust-strip {
+      padding: 18px 24px 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .trust-card,
+    .support-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(23, 32, 27, 0.05);
+    }
+
+    .trust-card {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .trust-card i,
+    .support-card i {
+      color: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .trust-card strong,
+    .support-card h3 {
+      display: block;
+      margin: 0 0 5px;
+      font-size: 16px;
+    }
+
+    .trust-card span,
+    .support-card p {
+      display: block;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .support-band {
+      padding: 18px 24px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .support-card {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .support-card .btn {
+      justify-self: start;
+    }
+
+    .care-filter {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 8px 22px rgba(23, 32, 27, 0.04);
+    }
+
+    .care-filter-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .care-filter-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #projectGrid,
+    #groupsSection,
+    #institutionsSection {
+      scroll-margin-top: 90px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: var(--green-2);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .topbar h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .topbar p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 720px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      height: 40px;
+      border-radius: 8px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: #ffffff;
+    }
+
+    .btn.subtle {
+      background: var(--surface-soft);
+      color: var(--green);
+      border-color: transparent;
+    }
+
+    .btn.ghost {
+      background: transparent;
+    }
+
+    .btn:hover,
+    .segment:hover {
+      border-color: rgba(15, 108, 122, 0.35);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .toolbar {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 22px rgba(23, 32, 27, 0.04);
+    }
+
+    .search {
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      background: #fbfcfb;
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .segments {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .segment {
+      min-height: 38px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fbfcfb;
+      color: var(--muted);
+      padding: 0 12px;
+      font-weight: 700;
+    }
+
+    .segment.is-active {
+      color: #ffffff;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .metric-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .metric:nth-child(1) .metric-icon {
+      background: #e3f0e7;
+      color: var(--green);
+    }
+
+    .metric:nth-child(2) .metric-icon {
+      background: #e8f1f5;
+      color: var(--sky);
+    }
+
+    .metric:nth-child(3) .metric-icon {
+      background: #fff4df;
+      color: var(--amber);
+    }
+
+    .metric:nth-child(4) .metric-icon {
+      background: #f7e9e2;
+      color: var(--clay);
+    }
+
+    .metric span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .metric strong {
+      font-size: 20px;
+    }
+
+    .pathways {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .path-card {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 0 10px 26px rgba(23, 32, 27, 0.05);
+    }
+
+    .path-card h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .path-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .path-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: var(--green);
+    }
+
+    .path-card:nth-child(2) .path-icon {
+      background: var(--teal);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0 12px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .institution-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(23, 32, 27, 0.05);
+      display: grid;
+      grid-template-rows: 170px auto;
+      min-width: 0;
+      transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .project-card.is-selected {
+      border-color: var(--green);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    .project-card:hover,
+    .institution-card:hover {
+      border-color: rgba(15, 108, 122, 0.32);
+      box-shadow: 0 14px 34px rgba(23, 32, 27, 0.08);
+    }
+
+    .project-image {
+      position: relative;
+      overflow: hidden;
+      background: #d7e3dc;
+    }
+
+    .project-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      min-height: 26px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--green);
+    }
+
+    .image-badge {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+    }
+
+    .project-body {
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .project-title {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .project-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      background: #f0f4f1;
+      color: #456055;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .decision-cell {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfb;
+      padding: 10px;
+      min-width: 0;
+    }
+
+    .decision-cell span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .decision-cell strong {
+      display: block;
+      line-height: 1.35;
+      font-size: 14px;
+    }
+
+    .audit-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .audit-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 999px;
+      background: var(--cyan-soft);
+      color: var(--cyan);
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .specialty-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 12px;
+    }
+
+    .specialty {
+      border: 1px solid #cdded1;
+      background: #f3faf5;
+      color: var(--green);
+      border-radius: 8px;
+      padding: 7px 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+
+    .specialty-feature {
+      border: 1px solid #d9e8de;
+      border-radius: 8px;
+      background: #fbfcfb;
+      padding: 12px;
+      display: grid;
+      gap: 5px;
+    }
+
+    .specialty-feature strong {
+      color: var(--green);
+      line-height: 1.3;
+    }
+
+    .specialty-feature span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .specialty-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .project-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .price {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .price strong {
+      font-size: 19px;
+      color: var(--clay);
+    }
+
+    .price span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .institution-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(23, 32, 27, 0.05);
+    }
+
+    .institution-image {
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+      background: #dfe8e2;
+    }
+
+    .institution-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .institution-body {
+      padding: 14px;
+    }
+
+    .institution-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .institution-title h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .beds {
+      border-radius: 8px;
+      background: #e9f5ef;
+      color: var(--green);
+      padding: 6px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .intro {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0 0 12px;
+    }
+
+    .price-table {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .price-cell {
+      padding: 10px;
+      background: #fbfcfb;
+      border-right: 1px solid var(--line);
+      min-width: 0;
+    }
+
+    .price-cell:last-child {
+      border-right: 0;
+    }
+
+    .price-cell span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .price-cell strong {
+      display: block;
+      font-size: 15px;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .panel {
+      display: none;
+      position: sticky;
+      top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 18px;
+      background: #eef6f0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-header h3 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    .panel-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .lock-note {
+      margin: 14px 18px 0;
+      border: 1px solid #cdded1;
+      color: var(--green);
+      background: #f3faf5;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .form {
+      padding: 18px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #42564c;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      min-height: 40px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 10px;
+      color: var(--ink);
+      background: #fbfcfb;
+      outline: none;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 76px;
+    }
+
+    .field input[disabled],
+    .field select[disabled],
+    .field textarea[disabled] {
+      color: #52625a;
+      background: #edf2ef;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfb;
+    }
+
+    .switch-row span {
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .switch-row small {
+      display: block;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 3px;
+    }
+
+    .switch {
+      width: 48px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--line);
+      padding: 3px;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .switch::after {
+      content: "";
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      transition: transform 0.18s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
+    }
+
+    .switch.is-on {
+      background: var(--green);
+    }
+
+    .switch.is-on::after {
+      transform: translateX(20px);
+    }
+
+    .groups {
+      margin-top: 22px;
+    }
+
+    .group-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .group-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .group-card h4 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .group-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .progress {
+      height: 8px;
+      background: #e8eee9;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      background: var(--teal);
+      border-radius: inherit;
+    }
+
+    .group-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fbfcfb;
+      display: grid;
+      place-items: center;
+      color: var(--green);
+    }
+
+    .group-page {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(23, 32, 27, 0.05);
+    }
+
+    .group-page-header {
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: #f3f8f4;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .group-page-header h4 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .group-page-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .status-chip {
+      border-radius: 999px;
+      background: #e8f1f5;
+      color: var(--teal);
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .group-page-body {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .group-hero {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .group-hero img {
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .group-locked {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .member-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .member-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfb;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #e2efe7;
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .member-card strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .member-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .share-shell {
+      width: min(520px, 100%);
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+      box-shadow: 0 16px 44px rgba(33, 116, 118, 0.14);
+      align-self: center;
+    }
+
+    .share-cover {
+      height: 210px;
+      position: relative;
+      overflow: hidden;
+      background: #dfe8e2;
+    }
+
+    .share-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .share-cover .badge {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+    }
+
+    .share-body {
+      padding: 18px;
+      display: grid;
+      gap: 15px;
+    }
+
+    .share-body h4 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .share-body p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 13px;
+    }
+
+    .share-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .share-stat {
+      padding: 10px;
+      border-right: 1px solid var(--line);
+      background: #fbfcfb;
+    }
+
+    .share-stat:last-child {
+      border-right: 0;
+    }
+
+    .share-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .share-stat strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      background: #17251f;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 13px 15px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 20;
+      max-width: min(360px, calc(100vw - 40px));
+      line-height: 1.5;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 22, 18, 0.55);
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop[hidden] {
+      display: none;
+    }
+
+    .detail-modal {
+      width: min(900px, 100%);
+      max-height: min(86dvh, 860px);
+      height: min(86dvh, 860px);
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      min-height: 0;
+    }
+
+    .detail-media {
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-height: 100%;
+      height: 100%;
+      background: #dfe8e2;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .detail-media img {
+      width: 100%;
+      height: auto;
+      min-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .gallery-stage {
+      position: relative;
+      min-height: 0;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(36, 88, 70, 0.35) transparent;
+      background: #dfe8e2;
+    }
+
+    .gallery-stage::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .gallery-stage::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .gallery-stage::-webkit-scrollbar-thumb {
+      background: rgba(36, 88, 70, 0.35);
+      border-radius: 999px;
+    }
+
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      background: rgba(17, 32, 27, 0.68);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .gallery-nav.prev {
+      left: 12px;
+    }
+
+    .gallery-nav.next {
+      right: 12px;
+    }
+
+    .gallery-nav[hidden],
+    .gallery-count[hidden],
+    .gallery-thumbs[hidden] {
+      display: none;
+    }
+
+    .gallery-count {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      border-radius: 999px;
+      background: rgba(17, 32, 27, 0.72);
+      color: #ffffff;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .gallery-thumbs {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 74px;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px;
+      background: #f6faf7;
+      border-top: 1px solid var(--line);
+    }
+
+    .gallery-thumb {
+      height: 54px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      padding: 0;
+      overflow: hidden;
+      background: #dfe8e2;
+    }
+
+    .gallery-thumb.is-active {
+      border-color: var(--green);
+    }
+
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .detail-content {
+      padding: 22px;
+      height: 100%;
+      max-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(36, 88, 70, 0.35) transparent;
+      min-height: 0;
+    }
+
+    .detail-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .detail-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .detail-content::-webkit-scrollbar-thumb {
+      background: rgba(36, 88, 70, 0.35);
+      border-radius: 999px;
+    }
+
+    .action-modal {
+      width: min(860px, 100%);
+      max-height: min(90dvh, 920px);
+      height: min(90dvh, 920px);
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .action-header {
+      padding: 18px 20px;
+      background: #eef6f0;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      flex: 0 0 auto;
+    }
+
+    .action-header h3 {
+      margin: 8px 0 6px;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .action-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .action-scroll {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: stretch;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(36, 88, 70, 0.35) transparent;
+    }
+
+    .action-scroll > * {
+      flex: 0 0 auto;
+    }
+
+    .action-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .action-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .action-scroll::-webkit-scrollbar-thumb {
+      background: rgba(36, 88, 70, 0.35);
+      border-radius: 999px;
+    }
+
+    .advisor-card {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .advisor-qr {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f6faf7;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .qr-box {
+      width: 170px;
+      height: 170px;
+      border-radius: 8px;
+      border: 10px solid #ffffff;
+      background:
+        linear-gradient(90deg, #17201b 12px, transparent 12px) 0 0/34px 34px,
+        linear-gradient(#17201b 12px, transparent 12px) 0 0/34px 34px,
+        linear-gradient(90deg, transparent 10px, #17201b 10px 20px, transparent 20px) 7px 7px/44px 44px,
+        #eef4ef;
+      box-shadow: inset 0 0 0 1px rgba(23, 32, 27, 0.08);
+      position: relative;
+    }
+
+    .qr-box::before,
+    .qr-box::after {
+      content: "";
+      position: absolute;
+      width: 46px;
+      height: 46px;
+      border: 8px solid #17201b;
+      background: #eef4ef;
+      border-radius: 4px;
+    }
+
+    .qr-box::before {
+      left: 12px;
+      top: 12px;
+    }
+
+    .qr-box::after {
+      right: 12px;
+      bottom: 12px;
+    }
+
+    .advisor-qr strong {
+      display: block;
+      color: var(--green);
+      font-size: 16px;
+    }
+
+    .advisor-qr span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .advisor-info {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .advisor-phone {
+      border: 1px solid #cdded1;
+      background: #f3faf5;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .advisor-phone span {
+      color: var(--muted);
+      font-size: 12px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .advisor-phone strong {
+      color: var(--green);
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .action-summary {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      background: #fbfcfb;
+    }
+
+    .action-summary img {
+      width: 100%;
+      height: 100%;
+      min-height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .action-summary-body {
+      padding: 16px;
+      min-width: 0;
+    }
+
+    .group-detail-summary {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+      background: #fbfcfb;
+    }
+
+    .group-detail-photo {
+      flex: 0 0 220px;
+      min-height: 190px;
+      background: #dfe8e2;
+    }
+
+    .group-detail-photo img {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      object-fit: cover;
+      display: block;
+    }
+
+    .group-detail-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+    }
+
+    .group-detail-card .section-head {
+      margin-top: 0;
+    }
+
+    .group-detail-summary .action-summary-body {
+      flex: 1 1 auto;
+    }
+
+    .action-summary-body h4,
+    .action-section h4 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .action-summary-body p {
+      margin: 0 0 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .action-note {
+      border: 1px solid #cdded1;
+      background: #f3faf5;
+      color: var(--green);
+      border-radius: 8px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .action-section {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+
+    .action-form {
+      display: grid;
+      gap: 13px;
+    }
+
+    .action-footer {
+      position: sticky;
+      bottom: 0;
+      margin: 4px -20px -20px;
+      padding: 14px 20px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .detail-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .detail-top h3 {
+      margin: 8px 0 8px;
+      font-size: 24px;
+      line-height: 1.25;
+    }
+
+    .detail-top p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .detail-close {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fbfcfb;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .detail-block {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .detail-block h4 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .detail-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .fact {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfcfb;
+      min-width: 0;
+    }
+
+    .fact span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .fact strong {
+      display: block;
+      line-height: 1.4;
+    }
+
+    .empty {
+      border: 1px dashed #b9c7bf;
+      border-radius: 8px;
+      padding: 22px;
+      text-align: center;
+      color: var(--muted);
+      background: #fbfcfb;
+    }
+
+    @media (max-width: 1180px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 1040px) {
+      .intent-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-search {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-search .btn {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 880px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 16px;
+      }
+
+      .nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .sidebar-card {
+        display: none;
+      }
+
+      .main {
+        padding: 0 0 28px;
+      }
+
+      .site-nav-inner {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+
+      .site-links {
+        justify-content: flex-start;
+      }
+
+      .consumer-hero {
+        min-height: auto;
+        background:
+          linear-gradient(180deg, rgba(17, 37, 29, 0.92), rgba(17, 37, 29, 0.7)),
+          url("https://images.unsplash.com/photo-1576765607924-0f4f2b9fb7f2?auto=format&fit=crop&w=1400&q=80") center/cover;
+        background-color: #17251f;
+      }
+
+      .hero-inner {
+        min-height: auto;
+        padding: 42px 16px 26px;
+      }
+
+      .hero-copy h2 {
+        font-size: 36px;
+      }
+
+      .hero-search {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-strip,
+      .support-band {
+        grid-template-columns: 1fr;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .metrics,
+      .pathways,
+      .layout {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .topbar {
+        display: grid;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .segments {
+        justify-content: flex-start;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .institution-grid,
+      .pathways {
+        grid-template-columns: 1fr;
+      }
+
+      .group-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .group-hero img {
+        height: 220px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy h2 {
+        font-size: 19px;
+      }
+
+      .hero-search {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-search .btn {
+        height: 52px;
+        width: 100%;
+      }
+
+      .intent-card {
+        padding: 14px;
+      }
+
+      .intent-card h3 {
+        font-size: 18px;
+      }
+
+      .hero-field strong {
+        white-space: normal;
+      }
+
+      .site-nav-inner {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .field-grid,
+      .group-card {
+        grid-template-columns: 1fr;
+      }
+
+      .group-actions {
+        justify-content: flex-start;
+      }
+
+      .path-card {
+        grid-template-columns: 1fr;
+      }
+
+      .price-table {
+        grid-template-columns: 1fr;
+      }
+
+      .decision-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .price-cell {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .price-cell:last-child {
+        border-bottom: 0;
+      }
+
+      .detail-modal {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 320px) minmax(0, 1fr);
+        height: min(90dvh, 900px);
+      }
+
+      .detail-media img {
+        min-height: 0;
+        max-height: none;
+      }
+
+      .gallery-stage {
+        min-height: 0;
+        height: 100%;
+      }
+
+      .detail-content {
+        height: 100%;
+        max-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .detail-facts {
+        grid-template-columns: 1fr;
+      }
+
+      .group-detail-summary {
+        flex-direction: column;
+      }
+
+      .group-detail-photo {
+        flex-basis: auto;
+        min-height: 180px;
+      }
+
+      .specialty-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .group-page-header,
+      .member-card {
+        grid-template-columns: 1fr;
+      }
+
+      .group-page-header {
+        display: grid;
+      }
+
+      .share-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .share-stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .share-stat:last-child {
+        border-bottom: 0;
+      }
+
+      .action-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .advisor-card {
+        grid-template-columns: 1fr;
+      }
+
+      .action-summary img {
+        height: 190px;
+        min-height: 190px;
+      }
+
+      .action-footer .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i data-lucide="leaf"></i></div>
+        <div>
+          <h1>安心旅养</h1>
+          <span>3-90 天旅居康养平台</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="is-active"><i data-lucide="map"></i><span>项目库</span></button>
+        <button><i data-lucide="users-round"></i><span>正在成团</span></button>
+        <button><i data-lucide="clipboard-check"></i><span>评估表</span></button>
+        <button><i data-lucide="calendar-days"></i><span>订单</span></button>
+        <button id="navCare"><i data-lucide="building-2"></i><span>自主选院</span></button>
+        <button><i data-lucide="settings-2"></i><span>运营台</span></button>
+      </nav>
+
+      <div class="sidebar-card">
+        <strong>平台规则</strong>
+        <p>老人发起拼团时，必须绑定平台已审核上架项目。目的地、机构、价格和退款规则由平台锁定。</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="site-nav">
+        <div class="site-nav-inner">
+          <div class="site-brand">
+            <div class="brand-mark"><i data-lucide="leaf"></i></div>
+            <span>安心旅养</span>
+          </div>
+          <nav class="site-links" aria-label="页面导航">
+            <button data-scroll-target="projectGrid">旅居拼团</button>
+            <button data-scroll-target="institutionsSection">护理院</button>
+          </nav>
+          <button class="btn primary" id="navMatch"><i data-lucide="headphones"></i>顾问帮选</button>
+        </div>
+      </header>
+
+      <section class="consumer-hero">
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <span class="hero-badge"><i data-lucide="shield-check"></i>平台严选短期旅居与护理照料</span>
+            <h2>去哪旅居康养，安心又好玩，自己说了算</h2>
+          </div>
+
+          <div class="intent-grid" aria-label="选择服务路径">
+            <article class="intent-card">
+              <div class="intent-head">
+                <div class="intent-icon"><i data-lucide="heart-pulse"></i></div>
+                <div>
+                  <h3>短期照护 / 出院过渡</h3>
+                  <p>先匹配能接收的护理院，看剩余床位、护理特色、医疗距离和日费用。</p>
+                </div>
+              </div>
+              <div class="intent-actions">
+                <button class="btn primary" id="showInstitutions"><i data-lucide="building-2"></i>看可预约机构</button>
+                <button class="btn subtle" id="navMatchCare"><i data-lucide="headphones"></i>顾问帮筛</button>
+              </div>
+            </article>
+
+            <article class="intent-card">
+              <div class="intent-head">
+                <div class="intent-icon"><i data-lucide="users-round"></i></div>
+                <div>
+                  <h3>旅居拼团 / 同伴出行</h3>
+                  <p>从平台已审核项目里发起或加入拼团，价格、机构、团期和服务边界先锁定。</p>
+                </div>
+              </div>
+              <div class="intent-actions">
+                <button class="btn primary" id="focusLaunch"><i data-lucide="plus"></i>发起拼团</button>
+                <button class="btn subtle" id="showGroups"><i data-lucide="users"></i>正在成团</button>
+              </div>
+            </article>
+          </div>
+
+          <div class="hero-search ai-search" aria-label="AI 照护需求匹配">
+            <div class="ai-field">
+              <i data-lucide="sparkles"></i>
+              <div>
+                <label for="aiNeedInput">告诉 AI 老人的基本情况和需求</label>
+                <textarea id="aiNeedInput" placeholder="例如：爸爸 78 岁，杭州，刚做完髋关节手术，出院后想短住 15 天，需要协助翻身和康复训练。"></textarea>
+              </div>
+            </div>
+            <button class="btn primary" id="heroSearchButton"><i data-lucide="sparkles"></i>AI 帮我匹配</button>
+            <div class="ai-examples" aria-label="需求示例">
+              <button class="ai-example" type="button" data-ai-example="妈妈 72 岁，绍兴，中风后稳定期，想短住 7 天，需要用药提醒和夜间巡房。">中风后短住</button>
+              <button class="ai-example" type="button" data-ai-example="爸爸 78 岁，杭州，骨科术后恢复，想住 15 天，需要移位协助和康复训练衔接。">骨科术后恢复</button>
+              <button class="ai-example" type="button" data-ai-example="外婆 83 岁，杭州，烫伤创面稳定期，需要创面护理和家属反馈，先住 10 天。">创面护理</button>
+              <button class="ai-example" type="button" data-ai-example="父母自理，想找同伴去安吉避暑 15 天，希望有人一起拼团出发。">旅居拼团</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="trust-strip" aria-label="平台保障">
+        <article class="trust-card">
+          <i data-lucide="badge-check"></i>
+          <div><strong>机构实地审核</strong><span>展示接待范围、医疗距离、照护特色和价格拆分。</span></div>
+        </article>
+        <article class="trust-card">
+          <i data-lucide="bed-double"></i>
+          <div><strong>床位与团期透明</strong><span>拼团项目锁定机构、价格、团期和服务边界。</span></div>
+        </article>
+        <article class="trust-card">
+          <i data-lucide="headphones"></i>
+          <div><strong>顾问免费匹配</strong><span>不确定怎么选时，先做需求梳理和机构短名单。</span></div>
+        </article>
+      </section>
+
+      <section class="support-band" aria-label="快速服务入口">
+        <article class="support-card">
+          <i data-lucide="clipboard-list"></i>
+          <h3>免费生成机构短名单</h3>
+          <p>按城市、照护等级、预算和入住时长筛出 3-5 个可选机构。</p>
+          <button class="btn subtle" data-scroll-target="institutionsSection">查看机构</button>
+        </article>
+        <article class="support-card">
+          <i data-lucide="siren"></i>
+          <h3>紧急短期照护</h3>
+          <p>出院过渡、家庭喘息、临时看护，优先看剩余床位和接待能力。</p>
+          <button class="btn subtle" data-scroll-target="institutionsSection">看可预约床位</button>
+        </article>
+        <article class="support-card">
+          <i data-lucide="send"></i>
+          <h3>同伴拼团招募</h3>
+          <p>先看正在成团的项目，再从具体拼团里生成转发预览和报名入口。</p>
+          <button class="btn subtle" data-scroll-target="groupsSection">查看正在成团</button>
+        </article>
+      </section>
+
+      <section class="metrics" aria-label="平台数据">
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="badge-check"></i></div>
+          <div><span>已上架项目</span><strong>42</strong></div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="map-pin"></i></div>
+          <div><span>覆盖城市</span><strong>12</strong></div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="users-round"></i></div>
+          <div><span>本周拼团</span><strong>18</strong></div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="bed-double"></i></div>
+          <div><span>可锁床位</span><strong>236</strong></div>
+        </div>
+      </section>
+
+      <section class="pathways" aria-label="业务主线">
+        <article class="path-card">
+          <div>
+            <h3>主线一：拼团旅居</h3>
+            <p>老人从平台已上架项目里发起同伴拼团，平台锁定机构、价格、团期和服务边界。</p>
+          </div>
+          <button class="path-icon" id="pathGroup" aria-label="查看拼团主线"><i data-lucide="users-round"></i></button>
+        </article>
+        <article class="path-card">
+          <div>
+            <h3>主线二：护理院自主选择</h3>
+            <p>用户按机构介绍、剩余床位、床位费、护理费和医疗便利性自主选择并预约。</p>
+          </div>
+          <button class="path-icon" id="pathCare" aria-label="查看自主选院主线"><i data-lucide="building-2"></i></button>
+        </article>
+      </section>
+
+      <div class="layout">
+        <section>
+          <div class="toolbar">
+            <label class="search">
+              <i data-lucide="search"></i>
+              <input id="searchInput" type="search" placeholder="搜索城市、机构、项目">
+            </label>
+            <div class="segments" id="filters" aria-label="项目筛选"></div>
+          </div>
+
+          <div class="section-head">
+            <h3>平台已上架旅居拼团项目</h3>
+            <span id="projectCount"></span>
+          </div>
+
+          <div class="project-grid" id="projectGrid"></div>
+
+          <section class="groups" id="groupsSection">
+            <div class="section-head">
+              <h3>正在成团</h3>
+              <span>报名人数达到最低成团数后自动进入锁房</span>
+            </div>
+            <div class="group-list" id="groupList"></div>
+          </section>
+
+          <div id="groupDetailView" hidden></div>
+
+          <section class="groups" id="institutionsSection">
+            <div class="section-head">
+              <h3>按照护能力筛选护理院</h3>
+              <span id="institutionCount"></span>
+            </div>
+            <div class="care-filter" aria-label="按照护能力筛选机构">
+              <div class="care-filter-title"><i data-lucide="sliders-horizontal"></i>按老人照护情况筛选</div>
+              <div class="care-filter-list" id="careFilters"></div>
+            </div>
+            <div class="institution-grid" id="institutionGrid"></div>
+          </section>
+        </section>
+
+        <aside class="panel" id="launchPanel">
+          <div class="panel-header">
+            <h3>发起同伴拼团</h3>
+            <p id="panelSubtitle">先选择一个平台已上架项目。</p>
+          </div>
+          <div class="lock-note">
+            <i data-lucide="lock-keyhole"></i>
+            <span>项目核心信息已由平台锁定，发起人只能设置招募人数、团期和可见范围。</span>
+          </div>
+          <form class="form" id="launchForm">
+            <div class="field">
+              <label for="lockedProject">平台项目</label>
+              <input id="lockedProject" disabled>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="lockedCity">目的地</label>
+                <input id="lockedCity" disabled>
+              </div>
+              <div class="field">
+                <label for="lockedDuration">入住天数</label>
+                <input id="lockedDuration" disabled>
+              </div>
+            </div>
+            <div class="field">
+              <label for="lockedInstitution">接待机构</label>
+              <input id="lockedInstitution" disabled>
+            </div>
+            <div class="field">
+              <label for="lockedIntro">项目介绍</label>
+              <textarea id="lockedIntro" disabled></textarea>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="lockedPrice">平台价格</label>
+                <input id="lockedPrice" disabled>
+              </div>
+              <div class="field">
+                <label for="lockedCare">接待范围</label>
+                <input id="lockedCare" disabled>
+              </div>
+            </div>
+            <div class="field">
+              <label for="leaderName">发起人</label>
+              <input id="leaderName" placeholder="如 王阿姨、李叔叔、张女士代父母">
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="dateSelect">出发团期</label>
+                <select id="dateSelect"></select>
+              </div>
+              <div class="field">
+                <label for="visibility">可见范围</label>
+                <select id="visibility">
+                  <option>公开招募</option>
+                  <option>仅熟人可见</option>
+                  <option>平台帮招募</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="minPeople">最低成团</label>
+                <select id="minPeople">
+                  <option>4</option>
+                  <option selected>6</option>
+                  <option>8</option>
+                  <option>10</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="maxPeople">最多报名</label>
+                <select id="maxPeople">
+                  <option>8</option>
+                  <option selected>10</option>
+                  <option>12</option>
+                  <option>16</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="deadline">报名截止</label>
+              <input id="deadline" type="date">
+            </div>
+            <div class="switch-row">
+              <div>
+                <span>平台帮招募</span>
+                <small>进入公开拼团池，由顾问补充合适成员。</small>
+              </div>
+              <button class="switch is-on" type="button" id="assistSwitch" aria-label="平台帮招募"></button>
+            </div>
+            <div class="field">
+              <label for="note">发起说明</label>
+              <textarea id="note" placeholder="如 老年大学同学一起出发，希望作息规律、活动轻松。"></textarea>
+            </div>
+            <button class="btn primary" type="submit"><i data-lucide="send"></i>提交平台确认</button>
+          </form>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="detailModal" hidden>
+    <article class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="detail-media">
+        <div class="gallery-stage">
+          <img id="detailImage" alt="">
+          <button class="gallery-nav prev" id="detailPrev" aria-label="上一张照片"><i data-lucide="chevron-left"></i></button>
+          <button class="gallery-nav next" id="detailNext" aria-label="下一张照片"><i data-lucide="chevron-right"></i></button>
+          <span class="gallery-count" id="detailImageCount">1/1</span>
+        </div>
+        <div class="gallery-thumbs" id="detailThumbs" aria-label="照片缩略图"></div>
+      </div>
+      <div class="detail-content">
+        <div class="detail-top">
+          <div>
+            <span class="badge" id="detailBadge">详情</span>
+            <h3 id="detailTitle"></h3>
+            <p id="detailIntro"></p>
+          </div>
+          <button class="detail-close" id="detailClose" aria-label="关闭详情"><i data-lucide="x"></i></button>
+        </div>
+        <div class="detail-block">
+          <h4 id="detailFactTitle">关键信息</h4>
+          <div class="detail-facts" id="detailFacts"></div>
+        </div>
+        <div class="detail-block">
+          <h4>服务标签</h4>
+          <div class="tag-row" id="detailTags"></div>
+        </div>
+        <div class="detail-block" id="detailExtraBlock">
+          <h4 id="detailExtraTitle"></h4>
+          <div id="detailExtra"></div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="modal-backdrop" id="actionModal" hidden>
+    <article class="action-modal" role="dialog" aria-modal="true" aria-labelledby="actionTitle">
+      <div class="action-header">
+        <div>
+          <span class="badge" id="actionBadge">操作</span>
+          <h3 id="actionTitle"></h3>
+          <p id="actionSubtitle"></p>
+        </div>
+        <button class="detail-close" id="actionClose" aria-label="关闭操作窗口"><i data-lucide="x"></i></button>
+      </div>
+      <div class="action-scroll" id="actionContent"></div>
+    </article>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const projects = [
+      {
+        id: "AY-ANJI-15",
+        title: "安吉竹海避暑 15 天",
+        city: "湖州安吉",
+        institution: "清竹康养社区",
+        category: "避暑",
+        duration: 15,
+        price: 4280,
+        intro: "面向自理和轻照护老人设计的山地避暑短住项目，包含住宿、三餐、轻量活动、用药提醒和家属日报，适合希望夏季换环境小住的家庭。",
+        care: "自理/轻照护",
+        beds: 18,
+        minGroup: 6,
+        maxGroup: 12,
+        hospital: "距县人民医院 18 分钟",
+        dates: ["2026-06-10", "2026-06-24", "2026-07-08"],
+        tags: ["适老餐", "家属日报", "可接送", "轻活动"],
+        image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "AY-HAINAN-30",
+        title: "陵水暖冬候鸟 30 天",
+        city: "海南陵水",
+        institution: "椰林湾旅养公寓",
+        category: "避寒",
+        duration: 30,
+        price: 7680,
+        intro: "面向冬季候鸟旅居的月住项目，适合自理老人长期避寒，提供海边散步活动、慢病提醒、月住价格和子女探访住宿协助。",
+        care: "自理",
+        beds: 26,
+        minGroup: 8,
+        maxGroup: 16,
+        hospital: "距三甲医院 32 分钟",
+        dates: ["2026-11-18", "2026-12-02", "2026-12-16"],
+        tags: ["月住价", "海边步道", "慢病提醒", "探访住宿"],
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "AY-SX-7",
+        title: "绍兴水乡疗养 7 天",
+        city: "浙江绍兴",
+        institution: "鉴湖照护型旅居中心",
+        category: "疗养",
+        duration: 7,
+        price: 2580,
+        intro: "短期疗养和家庭喘息型项目，适合轻照护或半自理老人短住，支持用药提醒、陪诊可选、书画活动和每日照护反馈。",
+        care: "自理/轻照护/半自理",
+        beds: 12,
+        minGroup: 4,
+        maxGroup: 10,
+        hospital: "距综合医院 12 分钟",
+        dates: ["2026-06-06", "2026-06-20", "2026-07-04"],
+        tags: ["用药提醒", "陪诊可选", "书画活动", "短住体验"],
+        image: "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "AY-HUZHOU-3",
+        title: "湖州养老公寓试住 3 天",
+        city: "浙江湖州",
+        institution: "南太湖适老公寓",
+        category: "试住",
+        duration: 3,
+        price: 680,
+        intro: "养老公寓短租试住项目，适合子女先带父母体验房间、餐饮、活动和服务，再决定是否延长或转为长期入住。",
+        care: "自理/轻照护",
+        beds: 9,
+        minGroup: 4,
+        maxGroup: 8,
+        hospital: "距社区医院 8 分钟",
+        dates: ["2026-06-03", "2026-06-17", "2026-07-01"],
+        tags: ["3 天体验", "可转长住", "适老房", "餐食透明"],
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "AY-DALI-60",
+        title: "大理慢生活旅居 60 天",
+        city: "云南大理",
+        institution: "苍洱康养院落",
+        category: "候鸟",
+        duration: 60,
+        price: 13800,
+        intro: "长周期慢生活旅居项目，适合自理老人换城旅居，包含住宿、三餐、社区活动、慢病提醒和可续住/换城支持。",
+        care: "自理",
+        beds: 16,
+        minGroup: 8,
+        maxGroup: 14,
+        hospital: "距州医院 25 分钟",
+        dates: ["2026-09-01", "2026-09-15", "2026-10-08"],
+        tags: ["长周期", "换城可选", "摄影活动", "家属探访"],
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: "AY-QD-15",
+        title: "青岛海滨康养 15 天",
+        city: "山东青岛",
+        institution: "海岚旅养中心",
+        category: "避暑",
+        duration: 15,
+        price: 4980,
+        intro: "海滨避暑康养项目，适合自理和轻照护老人，提供适老餐、健康监测、海滨步道活动和可拼房选择。",
+        care: "自理/轻照护",
+        beds: 14,
+        minGroup: 6,
+        maxGroup: 12,
+        hospital: "距三甲医院 20 分钟",
+        dates: ["2026-07-12", "2026-07-26", "2026-08-09"],
+        tags: ["海滨步道", "适老餐", "健康监测", "可拼房"],
+        image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80"
+      }
+    ];
+
+    const institutions = [
+      {
+        id: "CI-QZ-01",
+        name: "清竹康养社区",
+        city: "湖州安吉",
+        type: "旅居康养社区",
+        intro: "山地低密社区，适合夏季避暑和轻照护短住，提供适老餐、慢病提醒、家属日报和接送协助。",
+        bedsLeft: 18,
+        totalBeds: 64,
+        bedPrice: 180,
+        mealPrice: 68,
+        carePrice: 120,
+        care: "自理/轻照护",
+        hospital: "距县人民医院 18 分钟",
+        specialties: [
+          { name: "骨科术后恢复", desc: "适合稳定期换药后短住、行动训练和日常起居协助" },
+          { name: "慢病管理", desc: "血压血糖提醒、用药提醒和家属日报" },
+          { name: "轻度认知照护", desc: "规律作息、活动陪伴和走失风险提醒" }
+        ],
+        tags: ["平台实地审核", "可短住", "家属日报", "适老餐"],
+        image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80"
+        ]
+      },
+      {
+        id: "CI-JH-02",
+        name: "鉴湖照护型旅居中心",
+        city: "浙江绍兴",
+        type: "护理型短住机构",
+        intro: "围绕短期疗养和家庭喘息设计，支持用药提醒、夜间巡房、陪诊可选和半自理老人短期入住。",
+        bedsLeft: 9,
+        totalBeds: 42,
+        bedPrice: 220,
+        mealPrice: 72,
+        carePrice: 180,
+        care: "自理/轻照护/半自理",
+        hospital: "距综合医院 12 分钟",
+        specialties: [
+          { name: "中风后照护", desc: "稳定期肢体活动协助、吞咽风险提示和康复陪护衔接" },
+          { name: "骨科恢复", desc: "髋膝关节术后稳定期的翻身、移位和防跌倒照护" },
+          { name: "半自理短住", desc: "家庭喘息、夜间巡房和照护记录反馈" }
+        ],
+        tags: ["护理型", "陪诊可选", "短住床位", "用药提醒"],
+        image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1550831107-1553da8c8464?auto=format&fit=crop&w=1200&q=80"
+        ]
+      },
+      {
+        id: "CI-NTH-03",
+        name: "南太湖适老公寓",
+        city: "浙江湖州",
+        type: "短租养老公寓",
+        intro: "以 3-30 天试住为主，房间适老化改造，价格透明，适合子女先带父母体验后再决定长住。",
+        bedsLeft: 11,
+        totalBeds: 58,
+        bedPrice: 150,
+        mealPrice: 60,
+        carePrice: 90,
+        care: "自理/轻照护",
+        hospital: "距社区医院 8 分钟",
+        specialties: [
+          { name: "术后短住观察", desc: "出院后短期试住、餐饮和基础生活照料" },
+          { name: "轻照护试住", desc: "适合先体验房间、餐食、活动和服务边界" },
+          { name: "慢病提醒", desc: "用药、血压血糖和家属反馈提醒" }
+        ],
+        tags: ["可转长住", "价格透明", "适老房", "3 天体验"],
+        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=1200&q=80"
+        ]
+      },
+      {
+        id: "CI-YLW-04",
+        name: "椰林湾旅养公寓",
+        city: "海南陵水",
+        type: "候鸟旅居公寓",
+        intro: "适合自理老人冬季长住，提供月住套餐、海边步道活动、慢病提醒和家属探访住宿。",
+        bedsLeft: 26,
+        totalBeds: 88,
+        bedPrice: 168,
+        mealPrice: 75,
+        carePrice: 80,
+        care: "自理",
+        hospital: "距三甲医院 32 分钟",
+        specialties: [
+          { name: "慢病候鸟旅居", desc: "稳定期老人长住、慢病提醒和家属探访协助" },
+          { name: "心脑血管稳定期", desc: "适合病情稳定、以生活照料和规律活动为主的人群" },
+          { name: "自理长住", desc: "月住套餐、海边步道活动和换季居住支持" }
+        ],
+        tags: ["避寒", "月住价", "探访住宿", "慢病提醒"],
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1590490359683-658d3d23f972?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=80"
+        ]
+      },
+      {
+        id: "CI-RH-05",
+        name: "瑞和康复护理院",
+        city: "浙江杭州",
+        type: "康复护理型机构",
+        intro: "面向出院后短期恢复和高照护需求家庭，提供骨科术后、创面照护、中风稳定期照护和家属同步反馈。",
+        bedsLeft: 7,
+        totalBeds: 36,
+        bedPrice: 260,
+        mealPrice: 78,
+        carePrice: 260,
+        care: "轻照护/半自理/失能照护",
+        hospital: "距康复医院 9 分钟",
+        specialties: [
+          { name: "骨科恢复", desc: "术后稳定期移位、翻身、防跌倒和康复训练衔接" },
+          { name: "烧伤烫伤创面护理", desc: "稳定期创面观察、换药协助和感染风险提示" },
+          { name: "中风后照护", desc: "肢体活动协助、吞咽风险提醒和家属照护记录" }
+        ],
+        tags: ["康复护理", "创面照护", "高照护", "家属反馈"],
+        image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1200&q=80"
+        ]
+      }
+    ];
+
+    let selectedProject = projects[0];
+    let selectedGroupId = "G-1024";
+    let activeFilter = "全部";
+    let activeCareFilter = "全部照护";
+    let searchText = "";
+    let assistOn = true;
+
+    const groups = [
+      {
+        id: "G-1024",
+        projectId: "AY-ANJI-15",
+        leader: "王阿姨",
+        date: "2026-06-10",
+        min: 8,
+        current: 5,
+        visibility: "公开招募",
+        status: "招募中",
+        members: [
+          { name: "王阿姨", role: "发起人", care: "自理", note: "想找同龄人一起避暑" },
+          { name: "李叔叔", role: "已报名", care: "自理", note: "同小区邻居推荐" },
+          { name: "陈阿姨", role: "已报名", care: "轻照护", note: "需要用药提醒" },
+          { name: "周叔叔", role: "已报名", care: "自理", note: "希望规律早睡" },
+          { name: "孙阿姨", role: "已报名", care: "自理", note: "老年大学同学" }
+        ]
+      },
+      {
+        id: "G-1025",
+        projectId: "AY-SX-7",
+        leader: "老年大学书画班",
+        date: "2026-06-20",
+        min: 6,
+        current: 6,
+        visibility: "仅熟人可见",
+        status: "已成团",
+        members: [
+          { name: "书画班刘老师", role: "发起人", care: "自理", note: "统一组织报名" },
+          { name: "赵阿姨", role: "已报名", care: "轻照护", note: "偏好书画活动" },
+          { name: "钱叔叔", role: "已报名", care: "自理", note: "需要少盐餐" },
+          { name: "吴阿姨", role: "已报名", care: "半自理", note: "子女陪同确认" },
+          { name: "郑叔叔", role: "已报名", care: "自理", note: "可自行集合" },
+          { name: "冯阿姨", role: "已报名", care: "轻照护", note: "需要夜间巡房" }
+        ]
+      }
+    ];
+
+    const filters = ["全部", "避暑", "避寒", "疗养", "试住", "候鸟"];
+    const careFilters = ["全部照护", "骨科恢复", "中风后照护", "创面护理", "慢病管理", "半自理短住", "轻照护试住"];
+    const projectGrid = document.getElementById("projectGrid");
+    const groupList = document.getElementById("groupList");
+    const groupDetailView = document.getElementById("groupDetailView");
+    const institutionGrid = document.getElementById("institutionGrid");
+    const projectCount = document.getElementById("projectCount");
+    const institutionCount = document.getElementById("institutionCount");
+    const toast = document.getElementById("toast");
+    const detailModal = document.getElementById("detailModal");
+    const detailImage = document.getElementById("detailImage");
+    const detailPrev = document.getElementById("detailPrev");
+    const detailNext = document.getElementById("detailNext");
+    const detailImageCount = document.getElementById("detailImageCount");
+    const detailThumbs = document.getElementById("detailThumbs");
+    const detailBadge = document.getElementById("detailBadge");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailIntro = document.getElementById("detailIntro");
+    const detailFacts = document.getElementById("detailFacts");
+    const detailTags = document.getElementById("detailTags");
+    const detailExtraTitle = document.getElementById("detailExtraTitle");
+    const detailExtra = document.getElementById("detailExtra");
+    const actionModal = document.getElementById("actionModal");
+    const actionBadge = document.getElementById("actionBadge");
+    const actionTitle = document.getElementById("actionTitle");
+    const actionSubtitle = document.getElementById("actionSubtitle");
+    const actionContent = document.getElementById("actionContent");
+    let detailGallery = [];
+    let detailGalleryAlt = "";
+    let detailGalleryIndex = 0;
+
+    function money(value) {
+      return "¥" + value.toLocaleString("zh-CN");
+    }
+
+    function icon(name) {
+      return `<i data-lucide="${name}"></i>`;
+    }
+
+    function fact(label, value) {
+      return `<div class="fact"><span>${label}</span><strong>${value}</strong></div>`;
+    }
+
+    function decision(label, value) {
+      return `<div class="decision-cell"><span>${label}</span><strong>${value}</strong></div>`;
+    }
+
+    function dailyPrice(item) {
+      return item.bedPrice + item.mealPrice + item.carePrice;
+    }
+
+    function specialtyChips(specialties) {
+      return `<div class="specialty-row">${specialties.map(item => `
+        <span class="specialty">${icon("heart-pulse")}${item.name}</span>
+      `).join("")}</div>`;
+    }
+
+    function specialtyFeatures(specialties) {
+      return `<div class="specialty-grid">${specialties.map(item => `
+        <div class="specialty-feature">
+          <strong>${item.name}</strong>
+          <span>${item.desc}</span>
+        </div>
+      `).join("")}</div>`;
+    }
+
+    function options(values, selectedValue) {
+      return values.map(value => `
+        <option ${String(value) === String(selectedValue) ? "selected" : ""}>${value}</option>
+      `).join("");
+    }
+
+    function setDetailGallery(images, altText) {
+      detailGallery = images && images.length ? images : [];
+      detailGalleryAlt = altText;
+      detailGalleryIndex = 0;
+      renderDetailGallery();
+    }
+
+    function renderDetailGallery() {
+      if (!detailGallery.length) {
+        detailImage.removeAttribute("src");
+        detailImage.alt = "";
+        detailPrev.hidden = true;
+        detailNext.hidden = true;
+        detailImageCount.hidden = true;
+        detailThumbs.hidden = true;
+        detailThumbs.innerHTML = "";
+        return;
+      }
+
+      detailImage.src = detailGallery[detailGalleryIndex];
+      detailImage.alt = `${detailGalleryAlt} ${detailGalleryIndex + 1}`;
+      detailImage.onload = () => {
+        detailImage.parentElement.scrollTop = 0;
+      };
+      const hasMultipleImages = detailGallery.length > 1;
+      detailPrev.hidden = !hasMultipleImages;
+      detailNext.hidden = !hasMultipleImages;
+      detailImageCount.hidden = !hasMultipleImages;
+      detailThumbs.hidden = !hasMultipleImages;
+      detailImageCount.textContent = `${detailGalleryIndex + 1}/${detailGallery.length}`;
+      detailThumbs.innerHTML = detailGallery.map((src, index) => `
+        <button class="gallery-thumb ${index === detailGalleryIndex ? "is-active" : ""}" data-gallery-index="${index}" aria-label="查看第 ${index + 1} 张照片">
+          <img src="${src}" alt="${detailGalleryAlt}缩略图 ${index + 1}">
+        </button>
+      `).join("");
+
+      detailThumbs.querySelectorAll("[data-gallery-index]").forEach(button => {
+        button.addEventListener("click", () => {
+          detailGalleryIndex = Number(button.dataset.galleryIndex);
+          renderDetailGallery();
+        });
+      });
+
+      refreshIcons();
+    }
+
+    function moveDetailGallery(direction) {
+      if (detailGallery.length <= 1) {
+        return;
+      }
+      detailGalleryIndex = (detailGalleryIndex + direction + detailGallery.length) % detailGallery.length;
+      renderDetailGallery();
+    }
+
+    function renderFilters() {
+      const filtersEl = document.getElementById("filters");
+      filtersEl.innerHTML = filters.map(item => `
+        <button class="segment ${item === activeFilter ? "is-active" : ""}" data-filter="${item}">${item}</button>
+      `).join("");
+
+      filtersEl.querySelectorAll("button").forEach(button => {
+        button.addEventListener("click", () => {
+          activeFilter = button.dataset.filter;
+          renderFilters();
+          renderProjects();
+        });
+      });
+    }
+
+    function renderCareFilters() {
+      const careFiltersEl = document.getElementById("careFilters");
+      careFiltersEl.innerHTML = careFilters.map(item => `
+        <button class="segment ${item === activeCareFilter ? "is-active" : ""}" data-care-filter="${item}">${item}</button>
+      `).join("");
+
+      careFiltersEl.querySelectorAll("button").forEach(button => {
+        button.addEventListener("click", () => {
+          activeCareFilter = button.dataset.careFilter;
+          renderCareFilters();
+          renderInstitutions();
+        });
+      });
+    }
+
+    function getFilteredProjects() {
+      const text = searchText.trim().toLowerCase();
+      return projects.filter(project => {
+        const categoryMatch = activeFilter === "全部" || project.category === activeFilter;
+        const textMatch = !text || [
+          project.title,
+          project.city,
+          project.institution,
+          project.category,
+          project.tags.join(" ")
+        ].join(" ").toLowerCase().includes(text);
+        return categoryMatch && textMatch;
+      });
+    }
+
+    function getFilteredInstitutions() {
+      const search = searchText.trim().toLowerCase();
+      const need = activeCareFilter
+        .replace("创面护理", "创面")
+        .replace("轻照护试住", "轻照护")
+        .replace("半自理短住", "半自理");
+
+      return institutions.filter(item => {
+        const text = [
+          item.name,
+          item.type,
+          item.intro,
+          item.care,
+          item.tags.join(" "),
+          item.specialties.map(specialty => `${specialty.name} ${specialty.desc}`).join(" ")
+        ].join(" ");
+        const careMatch = activeCareFilter === "全部照护" || text.includes(need);
+        const searchMatch = !search || text.toLowerCase().includes(search);
+        return careMatch && searchMatch;
+      });
+    }
+
+    function renderProjects() {
+      const visible = getFilteredProjects();
+      projectCount.textContent = `${visible.length} 个可发起拼团项目`;
+      projectGrid.innerHTML = visible.map(project => `
+        <article class="project-card ${project.id === selectedProject.id ? "is-selected" : ""}">
+          <div class="project-image">
+            <img src="${project.image}" alt="${project.city}${project.category}旅居环境">
+            <span class="badge image-badge">${icon("badge-check")}平台已审核</span>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">${project.title}</h3>
+            <div class="project-meta">
+              <span>${icon("map-pin")}${project.city}</span>
+              <span>${icon("calendar")}${project.duration} 天</span>
+              <span>${icon("heart-pulse")}${project.care}</span>
+              <span>${icon("hospital")}${project.hospital}</span>
+            </div>
+            <p class="intro">${project.intro}</p>
+            <div class="decision-grid">
+              ${[
+                decision("最近可发起", project.dates[0]),
+                decision("剩余床位", `${project.beds} 床`),
+                decision("成团人数", `${project.minGroup}-${project.maxGroup} 人`),
+                decision("平台价格", `${money(project.price)} 起`)
+              ].join("")}
+            </div>
+            <div class="audit-row">
+              <span class="audit-chip">${icon("lock-keyhole")}价格锁定</span>
+              <span class="audit-chip">${icon("shield-check")}机构已核</span>
+              <span class="audit-chip">${icon("receipt-text")}规则备案</span>
+            </div>
+            <div class="tag-row">
+              ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+            </div>
+            <div class="project-footer">
+              <div class="price">
+                <strong>${money(project.price)}</strong>
+                <span>平台锁定价起</span>
+              </div>
+              <div class="group-actions">
+                <button class="btn ghost" data-project-detail="${project.id}">${icon("info")}项目详情</button>
+                <button class="btn primary" data-select="${project.id}">${icon("users-round")}发起拼团</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      if (!visible.length) {
+        projectGrid.innerHTML = `<div class="empty">没有匹配的已上架项目</div>`;
+      }
+
+      projectGrid.querySelectorAll("[data-select]").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedProject = projects.find(item => item.id === button.dataset.select);
+          renderProjects();
+          updatePanel();
+          openLaunchModal(button.dataset.select);
+        });
+      });
+
+      projectGrid.querySelectorAll("[data-project-detail]").forEach(button => {
+        button.addEventListener("click", () => {
+          openProjectDetail(button.dataset.projectDetail);
+        });
+      });
+
+      refreshIcons();
+    }
+
+    function updatePanel() {
+      document.getElementById("panelSubtitle").textContent = `${selectedProject.title}，${selectedProject.institution}`;
+      document.getElementById("lockedProject").value = `${selectedProject.id} · ${selectedProject.title}`;
+      document.getElementById("lockedCity").value = selectedProject.city;
+      document.getElementById("lockedDuration").value = `${selectedProject.duration} 天`;
+      document.getElementById("lockedInstitution").value = selectedProject.institution;
+      document.getElementById("lockedIntro").value = selectedProject.intro;
+      document.getElementById("lockedPrice").value = `${money(selectedProject.price)} 起`;
+      document.getElementById("lockedCare").value = selectedProject.care;
+
+      const dateSelect = document.getElementById("dateSelect");
+      dateSelect.innerHTML = selectedProject.dates.map(date => `<option>${date}</option>`).join("");
+      document.getElementById("minPeople").value = String(selectedProject.minGroup);
+      document.getElementById("maxPeople").value = String(selectedProject.maxGroup);
+
+      const deadline = new Date(selectedProject.dates[0]);
+      deadline.setDate(deadline.getDate() - 10);
+      document.getElementById("deadline").value = deadline.toISOString().slice(0, 10);
+
+      refreshIcons();
+    }
+
+    function getProject(projectId) {
+      return projects.find(project => project.id === projectId);
+    }
+
+    function getGroup(groupId) {
+      return groups.find(group => group.id === groupId) || groups[0];
+    }
+
+    function getGroupMembers(group) {
+      if (!group.members) {
+        group.members = [
+          { name: group.leader, role: "发起人", care: "待评估", note: "发起后等待平台确认" }
+        ];
+      }
+      return group.members;
+    }
+
+    function getGroupStatus(group) {
+      return group.current >= group.min ? "已成团" : group.status;
+    }
+
+    function avatarText(name) {
+      return name.replace(/老年大学|书画班|阿姨|叔叔|老师|女士|先生/g, "").slice(0, 1) || "友";
+    }
+
+    function renderGroupPages(groupId = selectedGroupId) {
+      const group = getGroup(groupId);
+      selectedGroupId = group.id;
+      refreshIcons();
+    }
+
+    function openGroupDetailModal(groupId) {
+      const group = getGroup(groupId);
+      selectedGroupId = group.id;
+      const project = getProject(group.projectId);
+      const members = getGroupMembers(group);
+      const percent = Math.min(100, Math.round(group.current / group.min * 100));
+      const status = getGroupStatus(group);
+
+      detailModal.hidden = true;
+      actionBadge.textContent = "拼团详情";
+      actionTitle.textContent = `${group.leader}发起 · ${project.title}`;
+      actionSubtitle.textContent = `${project.city} · ${group.date} 出发 · ${group.current}/${group.min} 人报名 · ${status}`;
+      actionContent.innerHTML = `
+        <section class="group-detail-summary">
+          <div class="group-detail-photo">
+            <img src="${project.image}" alt="${project.title}项目环境">
+          </div>
+          <div class="action-summary-body">
+            <h4>平台锁定项目</h4>
+            <p>${project.intro}</p>
+            <div class="detail-facts">
+              ${[
+                fact("接待机构", project.institution),
+                fact("平台价格", `${money(project.price)} 起`),
+                fact("入住天数", `${project.duration} 天`),
+                fact("接待范围", project.care),
+                fact("医疗便利性", project.hospital),
+                fact("报名截止", group.deadline || "出发前 10 天")
+              ].join("")}
+            </div>
+          </div>
+        </section>
+
+        <section class="group-detail-card">
+          <div class="section-head">
+            <h3>成团进度</h3>
+            <span>${group.current} 人已报名，最低 ${group.min} 人成团</span>
+          </div>
+          <div class="progress" aria-label="成团进度"><span style="width:${percent}%"></span></div>
+        </section>
+
+        <section class="group-detail-card">
+          <div class="section-head">
+            <h3>报名成员</h3>
+            <span>${members.length} 位成员已留下照护信息</span>
+          </div>
+          <div class="member-list">
+            ${members.map(member => `
+              <article class="member-card">
+                <div class="avatar">${avatarText(member.name)}</div>
+                <div>
+                  <strong>${member.name}</strong>
+                  <span>${member.care} · ${member.note}</span>
+                </div>
+                <span class="status-chip">${member.role}</span>
+              </article>
+            `).join("")}
+          </div>
+        </section>
+
+        <div class="action-footer">
+          <button class="btn subtle" type="button" id="modalShareFriend">${icon("message-circle")}发给朋友</button>
+          <button class="btn subtle" type="button" id="modalShareMoments">${icon("share-2")}分享到朋友圈</button>
+          <button class="btn primary" type="button" id="modalJoinGroup">${icon("user-plus")}模拟报名</button>
+        </div>
+      `;
+
+      actionModal.hidden = false;
+      actionContent.scrollTop = 0;
+      document.body.classList.add("modal-open");
+      document.getElementById("modalShareFriend").addEventListener("click", () => shareGroup(group.id, "friend"));
+      document.getElementById("modalShareMoments").addEventListener("click", () => shareGroup(group.id, "moments"));
+      document.getElementById("modalJoinGroup").addEventListener("click", () => joinGroup(group.id));
+      refreshIcons();
+    }
+
+    function renderGroupDetail(group) {
+      const project = getProject(group.projectId);
+      const members = getGroupMembers(group);
+      const percent = Math.min(100, Math.round(group.current / group.min * 100));
+      const status = getGroupStatus(group);
+
+      groupDetailView.innerHTML = `
+        <article class="group-page">
+          <div class="group-page-header">
+            <div>
+              <h4>${group.leader}发起 · ${project.title}</h4>
+              <p>${project.city} · ${group.date} 出发 · ${group.visibility} · ${group.current}/${group.min} 人报名</p>
+            </div>
+            <span class="status-chip">${status}</span>
+          </div>
+          <div class="group-page-body">
+            <div class="group-hero">
+              <img src="${project.image}" alt="${project.title}项目环境">
+              <div class="group-locked">
+                <h4>平台锁定项目</h4>
+                <p class="intro">${project.intro}</p>
+                <div class="detail-facts">
+                  ${[
+                    fact("接待机构", project.institution),
+                    fact("平台价格", `${money(project.price)} 起`),
+                    fact("入住天数", `${project.duration} 天`),
+                    fact("接待范围", project.care),
+                    fact("医疗便利性", project.hospital),
+                    fact("报名截止", group.deadline || "出发前 10 天")
+                  ].join("")}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="section-head">
+                <h3>成团进度</h3>
+                <span>${group.current} 人已报名，最低 ${group.min} 人成团</span>
+              </div>
+              <div class="progress" aria-label="成团进度"><span style="width:${percent}%"></span></div>
+            </div>
+
+            <div>
+              <div class="section-head">
+                <h3>报名成员</h3>
+                <span>${members.length} 位成员已留下照护信息</span>
+              </div>
+              <div class="member-list">
+                ${members.map(member => `
+                  <article class="member-card">
+                    <div class="avatar">${avatarText(member.name)}</div>
+                    <div>
+                      <strong>${member.name}</strong>
+                      <span>${member.care} · ${member.note}</span>
+                    </div>
+                    <span class="status-chip">${member.role}</span>
+                  </article>
+                `).join("")}
+              </div>
+            </div>
+
+            <div class="group-actions">
+              <button class="btn subtle" data-open-share="${group.id}" data-share-channel="friend">${icon("message-circle")}发给朋友</button>
+              <button class="btn subtle" data-open-share="${group.id}" data-share-channel="moments">${icon("share-2")}分享到朋友圈</button>
+              <button class="btn primary" data-join-detail="${group.id}">${icon("user-plus")}模拟报名</button>
+            </div>
+          </div>
+        </article>
+      `;
+
+      groupDetailView.querySelectorAll("[data-open-share]").forEach(button => {
+        button.addEventListener("click", () => {
+          shareGroup(button.dataset.openShare, button.dataset.shareChannel);
+        });
+      });
+
+      groupDetailView.querySelectorAll("[data-join-detail]").forEach(button => {
+        button.addEventListener("click", () => joinGroup(button.dataset.joinDetail));
+      });
+    }
+
+    function sharePageMarkup(group) {
+      const project = getProject(group.projectId);
+      const members = getGroupMembers(group);
+      const percent = Math.min(100, Math.round(group.current / group.min * 100));
+      const status = getGroupStatus(group);
+
+      return `
+        <article class="share-shell">
+          <div class="share-cover">
+            <img src="${project.image}" alt="${project.title}项目环境">
+            <span class="badge">${icon("shield-check")}平台已审核项目</span>
+          </div>
+          <div class="share-body">
+            <span class="badge">${group.leader}邀请你一起</span>
+            <h4>${project.title}</h4>
+            <p>${group.leader}正在发起同伴拼团，目的地、接待机构、价格和服务边界均由平台锁定。适合想结伴出发、作息接近、家属可同步查看进度的老人。</p>
+
+            <div class="share-stats">
+              <div class="share-stat"><span>成团进度</span><strong>${group.current}/${group.min} 人</strong></div>
+              <div class="share-stat"><span>出发日期</span><strong>${group.date}</strong></div>
+              <div class="share-stat"><span>平台价格</span><strong>${money(project.price)} 起</strong></div>
+            </div>
+            <div class="progress" aria-label="转发页成团进度"><span style="width:${percent}%"></span></div>
+
+            <div class="detail-facts">
+              ${[
+                fact("接待机构", project.institution),
+                fact("目的地", project.city),
+                fact("接待范围", project.care),
+                fact("当前状态", status)
+              ].join("")}
+            </div>
+
+            <div class="tag-row">
+              ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+            </div>
+
+            <div class="action-note">
+              ${icon("lock-keyhole")}
+              <span>加入后先登记意向，平台顾问再确认床位、照护等级和最终出行安排。</span>
+            </div>
+
+            <div class="member-list">
+              ${members.slice(0, 3).map(member => `
+                <article class="member-card">
+                  <div class="avatar">${avatarText(member.name)}</div>
+                  <div>
+                    <strong>${member.name}</strong>
+                    <span>${member.care} · ${member.role}</span>
+                  </div>
+                  <span class="status-chip">已报名</span>
+                </article>
+              `).join("")}
+            </div>
+
+            <button class="btn primary" data-share-join="${group.id}">${icon("user-plus")}我想加入这个拼团</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function shareGroup(groupId, channel = "friend") {
+      openShareModal(groupId);
+      const message = channel === "moments"
+        ? "已生成朋友圈分享预览，可配文发布。"
+        : "已生成可直接发给朋友的拼团转发页。";
+      showToast(message);
+    }
+
+    function openShareModal(groupId = selectedGroupId) {
+      const group = getGroup(groupId);
+      selectedGroupId = group.id;
+      detailModal.hidden = true;
+      actionBadge.textContent = "拼团转发页";
+      actionTitle.textContent = "转发预览";
+      actionSubtitle.textContent = "适合分享到亲友群、小区群或老年大学群。";
+      actionContent.innerHTML = sharePageMarkup(group);
+      actionModal.hidden = false;
+      actionContent.scrollTop = 0;
+      document.body.classList.add("modal-open");
+
+      actionContent.querySelectorAll("[data-share-join]").forEach(button => {
+        button.addEventListener("click", () => joinGroup(button.dataset.shareJoin));
+      });
+      refreshIcons();
+    }
+
+    function joinGroup(groupId) {
+      const group = getGroup(groupId);
+      if (group.current >= group.min) {
+        showToast("该拼团已达到最低成团人数，等待平台锁房。");
+        renderGroupPages(group.id);
+        if (!actionModal.hidden && actionBadge.textContent === "拼团转发页") {
+          openShareModal(group.id);
+        }
+        return;
+      }
+
+      group.current += 1;
+      getGroupMembers(group).push({
+        name: "新报名成员",
+        role: "已报名",
+        care: "待评估",
+        note: "通过转发页留下意向"
+      });
+
+      if (group.current >= group.min) {
+        group.status = "已成团";
+        showToast("已达到最低成团人数，平台将进入锁房确认。");
+      } else {
+        showToast("报名已加入，详情页和转发页已更新。");
+      }
+
+      renderGroups();
+      renderGroupPages(group.id);
+      if (!actionModal.hidden && actionBadge.textContent === "拼团转发页") {
+        openShareModal(group.id);
+      } else if (!actionModal.hidden && actionBadge.textContent === "拼团详情") {
+        openGroupDetailModal(group.id);
+      }
+    }
+
+    function renderGroups() {
+      groupList.innerHTML = groups.map(group => {
+        const project = getProject(group.projectId);
+        const percent = Math.min(100, Math.round(group.current / group.min * 100));
+        const status = getGroupStatus(group);
+        return `
+          <article class="group-card">
+            <div>
+              <h4>${group.leader}发起 · ${project.title}</h4>
+              <p>${project.city} · ${group.date} 出发 · ${group.visibility} · ${group.current}/${group.min} 人 · ${status}</p>
+              <div class="progress" aria-label="成团进度"><span style="width:${percent}%"></span></div>
+            </div>
+            <div class="group-actions">
+              <button class="btn ghost" data-group-detail="${group.id}">${icon("file-text")}详情与分享</button>
+              <button class="btn ${status === "已成团" ? "subtle" : "primary"}" data-join="${group.id}">
+                ${status === "已成团" ? icon("check") + "已成团" : icon("user-plus") + "加入"}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      if (!groups.length) {
+        groupList.innerHTML = `<div class="empty">暂无拼团项目</div>`;
+      }
+
+      groupList.querySelectorAll("[data-join]").forEach(button => {
+        button.addEventListener("click", () => {
+          joinGroup(button.dataset.join);
+        });
+      });
+
+      groupList.querySelectorAll("[data-group-detail]").forEach(button => {
+        button.addEventListener("click", () => {
+          openGroupDetailModal(button.dataset.groupDetail);
+        });
+      });
+
+      refreshIcons();
+    }
+
+    function renderInstitutions() {
+      const visible = getFilteredInstitutions();
+      institutionCount.textContent = activeCareFilter === "全部照护"
+        ? `${visible.length} 家可自主选择机构`
+        : `${visible.length}/${institutions.length} 家匹配 ${activeCareFilter}`;
+      institutionGrid.innerHTML = visible.map(item => `
+        <article class="institution-card">
+          <div class="institution-image">
+            <img src="${item.image}" alt="${item.name}机构环境">
+            <span class="badge image-badge">${icon("badge-check")}平台审核</span>
+          </div>
+          <div class="institution-body">
+            <div class="institution-title">
+              <div>
+                <h3>${item.name}</h3>
+                <div class="project-meta">
+                  <span>${icon("map-pin")}${item.city}</span>
+                  <span>${icon("building-2")}${item.type}</span>
+                  <span>${icon("heart-pulse")}${item.care}</span>
+                </div>
+              </div>
+              <span class="beds">剩余 ${item.bedsLeft}/${item.totalBeds} 床</span>
+            </div>
+            <p class="intro">${item.intro}</p>
+            ${specialtyChips(item.specialties)}
+            <div class="decision-grid">
+              ${[
+                decision("可接情况", item.care),
+                decision("剩余床位", `${item.bedsLeft}/${item.totalBeds} 床`),
+                decision("医疗距离", item.hospital),
+                decision("预计日费", `${money(dailyPrice(item))}/天起`)
+              ].join("")}
+            </div>
+            <div class="audit-row">
+              <span class="audit-chip">${icon("badge-check")}资质已核</span>
+              <span class="audit-chip">${icon("heart-pulse")}护理能力已确认</span>
+              <span class="audit-chip">${icon("receipt-text")}价格拆分透明</span>
+            </div>
+            <div class="price-table" aria-label="${item.name}价格明细">
+              <div class="price-cell"><span>床位费</span><strong>¥${item.bedPrice}/天</strong></div>
+              <div class="price-cell"><span>餐费</span><strong>¥${item.mealPrice}/天</strong></div>
+              <div class="price-cell"><span>护理费</span><strong>¥${item.carePrice}/天起</strong></div>
+            </div>
+            <div class="tag-row">
+              ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+            </div>
+            <div class="project-footer">
+              <div class="price">
+                <strong>${item.hospital}</strong>
+                <span>机构介绍、床位和价格可直接比较</span>
+              </div>
+              <div class="group-actions">
+                <button class="btn ghost" data-institution-detail="${item.id}">${icon("clipboard-check")}看接待能力</button>
+                <button class="btn primary" data-book="${item.id}">${icon("calendar-plus")}预约确认床位</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      if (!visible.length) {
+        institutionGrid.innerHTML = `<div class="empty">当前没有完全匹配的机构，可切换照护情况或让顾问帮筛。</div>`;
+      }
+
+      institutionGrid.querySelectorAll("[data-book]").forEach(button => {
+        button.addEventListener("click", () => {
+          openBookingModal(button.dataset.book);
+        });
+      });
+
+      institutionGrid.querySelectorAll("[data-institution-detail]").forEach(button => {
+        button.addEventListener("click", () => {
+          openInstitutionDetail(button.dataset.institutionDetail);
+        });
+      });
+
+      refreshIcons();
+    }
+
+    function openProjectDetail(projectId) {
+      const project = getProject(projectId);
+      actionModal.hidden = true;
+      actionContent.innerHTML = "";
+      detailBadge.textContent = "平台拼团项目";
+      setDetailGallery([project.image], `${project.title}项目环境`);
+      detailTitle.textContent = project.title;
+      detailIntro.textContent = project.intro;
+      detailFacts.innerHTML = [
+        fact("目的地", project.city),
+        fact("接待机构", project.institution),
+        fact("入住天数", `${project.duration} 天`),
+        fact("平台价格", `${money(project.price)} 起`),
+        fact("接待范围", project.care),
+        fact("剩余床位", `${project.beds} 床`),
+        fact("医疗便利性", project.hospital),
+        fact("成团人数", `${project.minGroup}-${project.maxGroup} 人`)
+      ].join("");
+      detailTags.innerHTML = project.tags.map(tag => `<span class="tag">${tag}</span>`).join("");
+      detailExtraTitle.textContent = "可发起团期";
+      detailExtra.innerHTML = `<div class="tag-row">${project.dates.map(date => `<span class="tag">${date}</span>`).join("")}</div>`;
+      detailModal.hidden = false;
+      document.querySelector(".detail-content").scrollTop = 0;
+      document.body.classList.add("modal-open");
+      refreshIcons();
+    }
+
+    function openInstitutionDetail(institutionId) {
+      const item = institutions.find(institution => institution.id === institutionId);
+      actionModal.hidden = true;
+      actionContent.innerHTML = "";
+      detailBadge.textContent = "护理院/康养机构";
+      setDetailGallery(item.gallery || [item.image], `${item.name}机构环境`);
+      detailTitle.textContent = item.name;
+      detailIntro.textContent = item.intro;
+      detailFacts.innerHTML = [
+        fact("所在城市", item.city),
+        fact("机构类型", item.type),
+        fact("剩余床位", `${item.bedsLeft}/${item.totalBeds} 床`),
+        fact("接待范围", item.care),
+        fact("床位费", `¥${item.bedPrice}/天`),
+        fact("餐费", `¥${item.mealPrice}/天`),
+        fact("护理费", `¥${item.carePrice}/天起`),
+        fact("医疗便利性", item.hospital)
+      ].join("");
+      detailTags.innerHTML = item.tags.map(tag => `<span class="tag">${tag}</span>`).join("");
+      detailExtraTitle.textContent = "照护特色与价格说明";
+      detailExtra.innerHTML = `
+        ${specialtyFeatures(item.specialties)}
+        <div class="price-table">
+          <div class="price-cell"><span>床位费</span><strong>¥${item.bedPrice}/天</strong></div>
+          <div class="price-cell"><span>餐费</span><strong>¥${item.mealPrice}/天</strong></div>
+          <div class="price-cell"><span>护理费</span><strong>¥${item.carePrice}/天起</strong></div>
+        </div>
+      `;
+      detailModal.hidden = false;
+      document.querySelector(".detail-content").scrollTop = 0;
+      document.body.classList.add("modal-open");
+      refreshIcons();
+    }
+
+    function openLaunchModal(projectId = selectedProject.id) {
+      const project = getProject(projectId);
+      selectedProject = project;
+      updatePanel();
+      detailModal.hidden = true;
+      actionBadge.textContent = "发起拼团";
+      actionTitle.textContent = `发起 ${project.title}`;
+      actionSubtitle.textContent = "平台项目、机构、价格和服务边界已锁定；发起人只补充招募规则和同行说明。";
+
+      const deadline = new Date(project.dates[0]);
+      deadline.setDate(deadline.getDate() - 10);
+      const deadlineValue = deadline.toISOString().slice(0, 10);
+
+      actionContent.innerHTML = `
+        <section class="action-summary">
+          <img src="${project.image}" alt="${project.title}项目环境">
+          <div class="action-summary-body">
+            <h4>项目介绍</h4>
+            <p>${project.intro}</p>
+            <div class="detail-facts">
+              ${[
+                fact("目的地", project.city),
+                fact("接待机构", project.institution),
+                fact("入住天数", `${project.duration} 天`),
+                fact("平台价格", `${money(project.price)} 起`),
+                fact("接待范围", project.care),
+                fact("剩余床位", `${project.beds} 床`),
+                fact("医疗便利性", project.hospital),
+                fact("成团人数", `${project.minGroup}-${project.maxGroup} 人`)
+              ].join("")}
+            </div>
+          </div>
+        </section>
+
+        <div class="action-note">
+          ${icon("lock-keyhole")}
+          <span>老人只能基于平台已审核项目发起拼团，不能自行改目的地、机构、价格或退款规则。</span>
+        </div>
+
+        <section class="action-section">
+          <h4>锁定项确认</h4>
+          <div class="field-grid">
+            <div class="field">
+              <label for="actionLockedProject">平台项目</label>
+              <input id="actionLockedProject" value="${project.id} · ${project.title}" disabled>
+            </div>
+            <div class="field">
+              <label for="actionLockedPrice">平台价格</label>
+              <input id="actionLockedPrice" value="${money(project.price)} 起" disabled>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="actionLockedInstitution">接待机构</label>
+              <input id="actionLockedInstitution" value="${project.institution}" disabled>
+            </div>
+            <div class="field">
+              <label for="actionLockedCare">接待范围</label>
+              <input id="actionLockedCare" value="${project.care}" disabled>
+            </div>
+          </div>
+        </section>
+
+        <section class="action-section">
+          <h4>发起拼团信息</h4>
+          <form class="action-form" id="actionLaunchForm">
+            <div class="field">
+              <label for="actionLeaderName">发起人</label>
+              <input id="actionLeaderName" placeholder="如 王阿姨、李叔叔、张女士代父母">
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="actionDateSelect">出发团期</label>
+                <select id="actionDateSelect">${project.dates.map(date => `<option>${date}</option>`).join("")}</select>
+              </div>
+              <div class="field">
+                <label for="actionVisibility">可见范围</label>
+                <select id="actionVisibility">
+                  <option>公开招募</option>
+                  <option>仅熟人可见</option>
+                  <option selected>平台帮招募</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="actionMinPeople">最低成团</label>
+                <select id="actionMinPeople">${options([4, 6, 8, 10], project.minGroup)}</select>
+              </div>
+              <div class="field">
+                <label for="actionMaxPeople">最多报名</label>
+                <select id="actionMaxPeople">${options([8, 10, 12, 16], project.maxGroup)}</select>
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="actionDeadline">报名截止</label>
+                <input id="actionDeadline" type="date" value="${deadlineValue}">
+              </div>
+              <div class="field">
+                <label for="actionContact">联系手机</label>
+                <input id="actionContact" inputmode="tel" placeholder="用于平台顾问确认">
+              </div>
+            </div>
+            <div class="switch-row">
+              <div>
+                <span>平台帮招募</span>
+                <small>进入公开拼团池，由顾问补充合适成员。</small>
+              </div>
+              <button class="switch is-on" type="button" id="actionAssistSwitch" aria-label="平台帮招募"></button>
+            </div>
+            <div class="field">
+              <label for="actionNote">发起说明</label>
+              <textarea id="actionNote" placeholder="如 老年大学同学一起出发，希望作息规律、活动轻松。"></textarea>
+            </div>
+            <div class="action-footer">
+              <button class="btn ghost" type="button" id="actionCancel">${icon("x")}取消</button>
+              <button class="btn primary" type="submit">${icon("send")}提交平台确认</button>
+            </div>
+          </form>
+        </section>
+      `;
+
+      actionModal.hidden = false;
+      actionContent.scrollTop = 0;
+      document.body.classList.add("modal-open");
+      wireLaunchModal(project);
+      refreshIcons();
+    }
+
+    function wireLaunchModal(project) {
+      const visibility = document.getElementById("actionVisibility");
+      const assistSwitch = document.getElementById("actionAssistSwitch");
+      document.getElementById("actionCancel").addEventListener("click", closeAction);
+      assistSwitch.addEventListener("click", () => {
+        const isOn = !assistSwitch.classList.contains("is-on");
+        assistSwitch.classList.toggle("is-on", isOn);
+        visibility.value = isOn ? "平台帮招募" : "仅熟人可见";
+      });
+
+      document.getElementById("actionLaunchForm").addEventListener("submit", event => {
+        event.preventDefault();
+        const leaderInput = document.getElementById("actionLeaderName");
+        const leader = leaderInput.value.trim();
+        if (!leader) {
+          showToast("请填写发起人，方便平台顾问确认。");
+          leaderInput.focus();
+          return;
+        }
+
+        const min = Number(document.getElementById("actionMinPeople").value);
+        const max = Number(document.getElementById("actionMaxPeople").value);
+        if (max < min) {
+          showToast("最多报名人数不能小于最低成团人数。");
+          return;
+        }
+
+        groups.unshift({
+          id: "G-" + String(Date.now()).slice(-5),
+          projectId: project.id,
+          leader,
+          date: document.getElementById("actionDateSelect").value,
+          min,
+          current: 1,
+          visibility: visibility.value,
+          status: "待平台确认",
+          deadline: document.getElementById("actionDeadline").value,
+          members: [
+            { name: leader, role: "发起人", care: "待评估", note: "等待平台确认发布" }
+          ]
+        });
+
+        renderGroups();
+        renderGroupPages(groups[0].id);
+        closeAction();
+        openGroupDetailModal(groups[0].id);
+        showToast("拼团已提交平台确认，项目核心信息保持平台锁定。");
+      });
+    }
+
+    function openBookingModal(institutionId) {
+      const item = institutions.find(institution => institution.id === institutionId);
+      const defaultDate = new Date();
+      defaultDate.setDate(defaultDate.getDate() + 3);
+      const defaultDateValue = defaultDate.toISOString().slice(0, 10);
+      const dailyEstimate = item.bedPrice + item.mealPrice + item.carePrice;
+
+      detailModal.hidden = true;
+      actionBadge.textContent = "自主预约";
+      actionTitle.textContent = `${item.name} 自主预约`;
+      actionSubtitle.textContent = "查看机构介绍、床位、价格和医疗距离后，提交具体入住需求，由平台确认床位和费用。";
+
+      actionContent.innerHTML = `
+        <section class="action-summary">
+          <img src="${item.image}" alt="${item.name}机构环境">
+          <div class="action-summary-body">
+            <h4>机构介绍</h4>
+            <p>${item.intro}</p>
+            <div class="detail-facts">
+              ${[
+                fact("所在城市", item.city),
+                fact("机构类型", item.type),
+                fact("剩余床位", `${item.bedsLeft}/${item.totalBeds} 床`),
+                fact("接待范围", item.care),
+                fact("预计日费", `${money(dailyEstimate)}/天起`),
+                fact("医疗便利性", item.hospital)
+              ].join("")}
+            </div>
+          </div>
+        </section>
+
+        <section class="action-section">
+          <h4>照护特色</h4>
+          ${specialtyFeatures(item.specialties)}
+        </section>
+
+        <section class="action-section">
+          <h4>价格拆分</h4>
+          <div class="price-table" aria-label="${item.name}价格明细">
+            <div class="price-cell"><span>床位费</span><strong>¥${item.bedPrice}/天</strong></div>
+            <div class="price-cell"><span>餐费</span><strong>¥${item.mealPrice}/天</strong></div>
+            <div class="price-cell"><span>护理费</span><strong>¥${item.carePrice}/天起</strong></div>
+          </div>
+          <div class="tag-row">
+            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+        </section>
+
+        <div class="action-note">
+          ${icon("calendar-check")}
+          <span>预约提交后不会直接扣费；平台会先确认床位、护理级别和最终报价，再联系家属确认。</span>
+        </div>
+
+        <section class="action-section">
+          <h4>自主预约信息</h4>
+          <form class="action-form" id="actionBookingForm">
+            <div class="field-grid">
+              <div class="field">
+                <label for="bookingName">预约人</label>
+                <input id="bookingName" placeholder="如 张女士">
+              </div>
+              <div class="field">
+                <label for="bookingPhone">联系手机</label>
+                <input id="bookingPhone" inputmode="tel" placeholder="用于确认床位">
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="residentCare">入住人情况</label>
+                <select id="residentCare">
+                  <option>自理</option>
+                  <option>轻照护</option>
+                  <option>半自理</option>
+                  <option>需先评估</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="bookingBeds">预约床位</label>
+                <select id="bookingBeds">${options([1, 2], 1)}</select>
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="bookingDate">计划入住</label>
+                <input id="bookingDate" type="date" value="${defaultDateValue}">
+              </div>
+              <div class="field">
+                <label for="bookingDays">预计入住天数</label>
+                <select id="bookingDays">${options([3, 7, 15, 30, 60, 90], 15)}</select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="bookingNeed">护理与饮食需求</label>
+              <textarea id="bookingNeed" placeholder="如 高血压用药提醒、夜间起夜协助、少盐餐。"></textarea>
+            </div>
+            <div class="field">
+              <label for="bookingEstimate">费用预估</label>
+              <input id="bookingEstimate" disabled>
+            </div>
+            <div class="action-footer">
+              <button class="btn ghost" type="button" id="actionCancel">${icon("x")}取消</button>
+              <button class="btn primary" type="submit">${icon("calendar-plus")}提交预约</button>
+            </div>
+          </form>
+        </section>
+      `;
+
+      actionModal.hidden = false;
+      actionContent.scrollTop = 0;
+      document.body.classList.add("modal-open");
+      wireBookingModal(item, dailyEstimate);
+      refreshIcons();
+    }
+
+    function wireBookingModal(item, dailyEstimate) {
+      const bedsSelect = document.getElementById("bookingBeds");
+      const daysSelect = document.getElementById("bookingDays");
+      const estimateInput = document.getElementById("bookingEstimate");
+
+      function updateEstimate() {
+        const beds = Number(bedsSelect.value);
+        const days = Number(daysSelect.value);
+        estimateInput.value = `${days} 天 · ${beds} 床 · ${money(dailyEstimate * days * beds)} 起`;
+      }
+
+      document.getElementById("actionCancel").addEventListener("click", closeAction);
+      bedsSelect.addEventListener("change", updateEstimate);
+      daysSelect.addEventListener("change", updateEstimate);
+      updateEstimate();
+
+      document.getElementById("actionBookingForm").addEventListener("submit", event => {
+        event.preventDefault();
+        const nameInput = document.getElementById("bookingName");
+        const phoneInput = document.getElementById("bookingPhone");
+        const name = nameInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const beds = Number(bedsSelect.value);
+
+        if (!name) {
+          showToast("请填写预约人，方便平台顾问联系。");
+          nameInput.focus();
+          return;
+        }
+
+        if (!phone) {
+          showToast("请填写联系手机，用于确认床位。");
+          phoneInput.focus();
+          return;
+        }
+
+        if (beds > item.bedsLeft) {
+          showToast("当前剩余床位不足，请调整预约床位数。");
+          return;
+        }
+
+        item.bedsLeft -= beds;
+        renderInstitutions();
+        closeAction();
+        showToast(`${item.name} 预约已提交，平台将确认床位和最终费用。`);
+      });
+    }
+
+    function closeAction() {
+      actionModal.hidden = true;
+      actionContent.innerHTML = "";
+      if (detailModal.hidden) {
+        document.body.classList.remove("modal-open");
+      }
+    }
+
+    function closeDetail() {
+      detailModal.hidden = true;
+      if (actionModal.hidden) {
+        document.body.classList.remove("modal-open");
+      }
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("is-visible"), 2400);
+    }
+
+    function refreshIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons({ attrs: { width: 18, height: 18, "stroke-width": 2 } });
+      }
+    }
+
+    function inferCareFilter(text) {
+      if (/创面|烧伤|烫伤|换药|伤口/.test(text)) {
+        return "创面护理";
+      }
+      if (/中风|脑梗|偏瘫|吞咽/.test(text)) {
+        return "中风后照护";
+      }
+      if (/骨科|髋|膝|骨折|术后|康复训练/.test(text)) {
+        return "骨科恢复";
+      }
+      if (/半自理|夜间|巡房|喘息|失能/.test(text)) {
+        return "半自理短住";
+      }
+      if (/慢病|血压|血糖|用药/.test(text)) {
+        return "慢病管理";
+      }
+      if (/轻照护|试住|体验/.test(text)) {
+        return "轻照护试住";
+      }
+      return "全部照护";
+    }
+
+    function inferSearchKeyword(text) {
+      const terms = [
+        "杭州", "绍兴", "湖州", "安吉", "海南", "陵水", "青岛", "大理",
+        "瑞和", "清竹", "鉴湖", "南太湖", "椰林湾",
+        "安吉竹海", "绍兴水乡", "青岛海滨"
+      ];
+      return terms.find(term => text.includes(term)) || "";
+    }
+
+    function inferProjectFilter(text) {
+      if (/避暑|安吉|青岛|夏/.test(text)) {
+        return "避暑";
+      }
+      if (/避寒|海南|陵水|暖冬|冬/.test(text)) {
+        return "避寒";
+      }
+      if (/疗养|照护|陪诊|短住/.test(text)) {
+        return "疗养";
+      }
+      if (/试住|体验/.test(text)) {
+        return "试住";
+      }
+      if (/候鸟|长住|月住/.test(text)) {
+        return "候鸟";
+      }
+      return "全部";
+    }
+
+    function runAiMatch() {
+      const input = document.getElementById("aiNeedInput");
+      const needText = input.value.trim();
+      if (!needText) {
+        showToast("可以先简单说老人年龄、城市、身体情况和想住几天。");
+        input.focus();
+        return;
+      }
+
+      const keyword = inferSearchKeyword(needText);
+
+      if (/拼团|同伴|旅居|避暑|避寒|候鸟|一起/.test(needText)) {
+        searchText = keyword;
+        document.getElementById("searchInput").value = keyword;
+        activeFilter = inferProjectFilter(needText);
+        renderFilters();
+        renderProjects();
+        document.getElementById("projectGrid").scrollIntoView({ behavior: "smooth", block: "start" });
+        showToast(keyword ? `AI 已识别 ${keyword} · ${activeFilter}，筛出可发起项目。` : "AI 已按旅居拼团需求筛出平台已上架项目。");
+        return;
+      }
+
+      searchText = "";
+      document.getElementById("searchInput").value = "";
+      activeCareFilter = inferCareFilter(needText);
+      renderCareFilters();
+      renderInstitutions();
+      document.getElementById("institutionsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      showToast(keyword ? `AI 已识别 ${keyword} · ${activeCareFilter}，优先展示可接收机构。` : `AI 已识别为 ${activeCareFilter}，优先展示可接收机构。`);
+    }
+
+    function openAdvisorModal() {
+      detailModal.hidden = true;
+      actionBadge.textContent = "健康顾问";
+      actionTitle.textContent = "联系健康顾问帮你筛机构";
+      actionSubtitle.textContent = "适合情况复杂、时间紧、需要先确认能不能接收的家庭。";
+      actionContent.innerHTML = `
+        <section class="advisor-card">
+          <div class="advisor-qr">
+            <div class="qr-box" aria-label="健康顾问二维码示意图"></div>
+            <div>
+              <strong>扫码添加健康顾问</strong>
+              <span>发送老人情况、城市、入住时间，顾问给你整理机构短名单。</span>
+            </div>
+          </div>
+          <div class="advisor-info">
+            <div class="advisor-phone">
+              <div>
+                <span>健康顾问热线</span>
+                <strong>400-618-9090</strong>
+              </div>
+              <a class="btn primary" href="tel:4006189090">${icon("phone-call")}拨打电话</a>
+            </div>
+            <div class="action-note">
+              ${icon("clipboard-list")}
+              <span>建议准备：老人年龄、所在城市、身体情况、是否刚出院、预计入住天数、预算范围、是否需要夜间照护。</span>
+            </div>
+            <div class="detail-facts">
+              ${[
+                fact("服务时间", "09:00-21:00"),
+                fact("可协助", "筛机构 / 问床位 / 估费用"),
+                fact("优先场景", "出院过渡、创面护理、半自理短住"),
+                fact("后续动作", "确认床位和护理等级后再预约")
+              ].join("")}
+            </div>
+            <div class="action-footer">
+              <button class="btn ghost" type="button" id="advisorClose">${icon("x")}稍后再说</button>
+              <button class="btn subtle" type="button" id="advisorJumpCare">${icon("sliders-horizontal")}先自己筛机构</button>
+            </div>
+          </div>
+        </section>
+      `;
+      actionModal.hidden = false;
+      actionContent.scrollTop = 0;
+      document.body.classList.add("modal-open");
+      document.getElementById("advisorClose").addEventListener("click", closeAction);
+      document.getElementById("advisorJumpCare").addEventListener("click", () => {
+        closeAction();
+        document.getElementById("institutionsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      refreshIcons();
+    }
+
+    document.getElementById("searchInput").addEventListener("input", event => {
+      searchText = event.target.value;
+      renderProjects();
+      renderInstitutions();
+    });
+
+    document.getElementById("assistSwitch").addEventListener("click", event => {
+      assistOn = !assistOn;
+      event.currentTarget.classList.toggle("is-on", assistOn);
+      document.getElementById("visibility").value = assistOn ? "平台帮招募" : "仅熟人可见";
+    });
+
+    document.getElementById("launchForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const leader = document.getElementById("leaderName").value.trim();
+      if (!leader) {
+        showToast("请填写发起人，方便平台顾问确认。");
+        document.getElementById("leaderName").focus();
+        return;
+      }
+
+      const min = Number(document.getElementById("minPeople").value);
+      const max = Number(document.getElementById("maxPeople").value);
+      if (max < min) {
+        showToast("最多报名人数不能小于最低成团人数。");
+        return;
+      }
+
+      const group = {
+        id: "G-" + String(Date.now()).slice(-5),
+        projectId: selectedProject.id,
+        leader,
+        date: document.getElementById("dateSelect").value,
+        min,
+        current: 1,
+        visibility: document.getElementById("visibility").value,
+        status: "待平台确认",
+        deadline: document.getElementById("deadline").value,
+        members: [
+          { name: leader, role: "发起人", care: "待评估", note: "等待平台确认发布" }
+        ]
+      };
+
+      groups.unshift(group);
+      document.getElementById("note").value = "";
+      renderGroups();
+      renderGroupPages(group.id);
+      showToast("拼团已提交平台确认，项目核心信息保持平台锁定。");
+      openGroupDetailModal(group.id);
+    });
+
+    document.getElementById("focusLaunch").addEventListener("click", () => {
+      openLaunchModal(selectedProject.id);
+    });
+
+    document.getElementById("showGroups").addEventListener("click", () => {
+      document.getElementById("groupsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("showInstitutions").addEventListener("click", () => {
+      document.getElementById("institutionsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("heroSearchButton").addEventListener("click", () => {
+      runAiMatch();
+    });
+
+    document.getElementById("aiNeedInput").addEventListener("keydown", event => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+        runAiMatch();
+      }
+    });
+
+    document.querySelectorAll("[data-ai-example]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.getElementById("aiNeedInput").value = button.dataset.aiExample;
+        runAiMatch();
+      });
+    });
+
+    document.getElementById("navMatch").addEventListener("click", () => {
+      openAdvisorModal();
+    });
+
+    document.getElementById("navMatchCare").addEventListener("click", () => {
+      openAdvisorModal();
+    });
+
+    document.querySelectorAll("[data-scroll-target]").forEach(button => {
+      button.addEventListener("click", () => {
+        const target = document.getElementById(button.dataset.scrollTarget);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    document.getElementById("pathGroup").addEventListener("click", () => {
+      document.getElementById("projectGrid").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("pathCare").addEventListener("click", () => {
+      document.getElementById("institutionsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("navCare").addEventListener("click", () => {
+      document.getElementById("institutionsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("detailClose").addEventListener("click", closeDetail);
+    document.getElementById("actionClose").addEventListener("click", closeAction);
+    detailPrev.addEventListener("click", () => moveDetailGallery(-1));
+    detailNext.addEventListener("click", () => moveDetailGallery(1));
+
+    detailModal.addEventListener("click", event => {
+      if (event.target === detailModal) {
+        closeDetail();
+      }
+    });
+
+    actionModal.addEventListener("click", event => {
+      if (event.target === actionModal) {
+        closeAction();
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      if (!actionModal.hidden) {
+        closeAction();
+        return;
+      }
+
+      if (!detailModal.hidden) {
+        closeDetail();
+      }
+    });
+
+    renderFilters();
+    renderCareFilters();
+    renderProjects();
+    updatePanel();
+    renderGroups();
+    renderGroupPages();
+    renderInstitutions();
+    refreshIcons();
+  </script>
+</body>
+</html>
