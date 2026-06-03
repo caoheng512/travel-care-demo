@@ -340,6 +340,34 @@
       font-weight: 750;
     }
 
+    .hero-proof {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 980px;
+    }
+
+    .hero-proof-card {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 12px 14px;
+      display: grid;
+      gap: 4px;
+      backdrop-filter: blur(6px);
+    }
+
+    .hero-proof-card span {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .hero-proof-card strong {
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
     .intent-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -467,6 +495,245 @@
 
     .support-card .btn {
       justify-self: start;
+    }
+
+    .pitch-band,
+    .ai-result-band {
+      max-width: 1180px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 24px;
+    }
+
+    .pitch-band {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .pitch-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 10px 28px rgba(23, 32, 27, 0.05);
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .pitch-card h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+
+    .pitch-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .pitch-list,
+    .confirm-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pitch-list div,
+    .confirm-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfb;
+      padding: 11px 12px;
+    }
+
+    .pitch-list strong,
+    .confirm-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .pitch-list span,
+    .confirm-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .confirm-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .confirm-item i {
+      color: var(--green);
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    .business-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ai-result-band {
+      margin-bottom: 18px;
+    }
+
+    .match-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(23, 32, 27, 0.05);
+    }
+
+    .match-summary {
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: #f4f8f5;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr) 220px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .match-summary h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .match-summary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .match-signals {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-content: flex-start;
+    }
+
+    .match-signal {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #d7e3dc;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .match-checklist {
+      display: grid;
+      gap: 10px;
+    }
+
+    .match-check {
+      border: 1px solid #dbe5df;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .match-check i {
+      color: var(--teal);
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    .match-check strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .match-check span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .match-cards {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .match-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfb;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .match-card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .match-card h4 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .match-card .intro {
+      margin-bottom: 0;
+    }
+
+    .reason-list {
+      border: 1px solid #dce5e0;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 12px 12px 12px 28px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .reason-list li + li {
+      margin-top: 6px;
+    }
+
+    .risk-note {
+      border: 1px solid #ecd7c7;
+      background: #fff6ef;
+      color: #7c5039;
+      border-radius: 8px;
+      padding: 11px 12px;
+      font-size: 12px;
+      line-height: 1.55;
     }
 
     .care-filter {
@@ -2049,6 +2316,16 @@
         grid-template-columns: 1fr;
       }
 
+      .hero-proof,
+      .pitch-band,
+      .match-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .match-summary {
+        grid-template-columns: 1fr;
+      }
+
       .hero-search {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -2113,7 +2390,9 @@
       }
 
       .trust-strip,
-      .support-band {
+      .support-band,
+      .pitch-band,
+      .ai-result-band {
         grid-template-columns: 1fr;
         padding-left: 16px;
         padding-right: 16px;
@@ -2175,6 +2454,12 @@
 
       .hero-copy h2 {
         font-size: 19px;
+      }
+
+      .hero-proof-card strong,
+      .pitch-card h3,
+      .match-card h4 {
+        font-size: 16px;
       }
 
       .hero-search {
@@ -2295,6 +2580,11 @@
         border-bottom: 0;
       }
 
+      .match-summary,
+      .match-cards {
+        padding: 14px;
+      }
+
       .action-summary {
         grid-template-columns: 1fr;
       }
@@ -2360,6 +2650,7 @@
           <div class="hero-copy">
             <span class="hero-badge"><i data-lucide="shield-check"></i>平台严选短期旅居与护理照料</span>
             <h2>去哪旅居康养，安心又好玩，自己说了算</h2>
+            <p>把养老机构的短期床位、康复照护能力和旅居团期，做成可搜索、可锁定、可拼团的服务库存平台。</p>
           </div>
 
           <div class="intent-grid" aria-label="选择服务路径">
@@ -2408,6 +2699,21 @@
               <button class="ai-example" type="button" data-ai-example="父母自理，想找同伴去安吉避暑 15 天，希望有人一起拼团出发。">旅居拼团</button>
             </div>
           </div>
+
+          <div class="hero-proof" aria-label="平台核心能力">
+            <article class="hero-proof-card">
+              <span>可锁库存</span>
+              <strong>短期床位与拼团团期先可见，再进入平台确认。</strong>
+            </article>
+            <article class="hero-proof-card">
+              <span>可判断能不能接</span>
+              <strong>骨科恢复、中风后照护、创面护理等能力前置展示。</strong>
+            </article>
+            <article class="hero-proof-card">
+              <span>可形成订单</span>
+              <strong>顾问复核护理等级、价格和退改规则，不止留电话。</strong>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -2447,40 +2753,121 @@
         </article>
       </section>
 
-      <section class="metrics" aria-label="平台数据">
-        <div class="metric">
-          <div class="metric-icon"><i data-lucide="badge-check"></i></div>
-          <div><span>已上架项目</span><strong>42</strong></div>
+      <section class="pitch-band" aria-label="平台模式说明">
+        <article class="pitch-card">
+          <div class="eyebrow">这不是黄页</div>
+          <h3>不是让家属自己翻目录，而是先判断机构能不能接</h3>
+          <div class="pitch-list">
+            <div>
+              <strong>短期库存可见</strong>
+              <span>先看剩余床位、可发起团期和短住天数，不是泛泛展示机构名录。</span>
+            </div>
+            <div>
+              <strong>护理能力前置</strong>
+              <span>骨科恢复、中风后照护、创面护理等场景直接进入筛选和匹配逻辑。</span>
+            </div>
+            <div>
+              <strong>平台继续确认</strong>
+              <span>需求提交后继续确认床位、护理级别和服务边界，离成交更近一步。</span>
+            </div>
+          </div>
+          <button class="btn subtle" id="pathGroup"><i data-lucide="layers-3"></i>看平台项目库存</button>
+        </article>
+
+        <article class="pitch-card">
+          <div class="eyebrow">平台确认单</div>
+          <h3>每一单先锁 5 件事，降低家属决策焦虑</h3>
+          <div class="confirm-list">
+            <div class="confirm-item">
+              <i data-lucide="bed-double"></i>
+              <div><strong>床位 / 团期</strong><span>确认是否还有短住床位、拼团是否能锁房。</span></div>
+            </div>
+            <div class="confirm-item">
+              <i data-lucide="heart-pulse"></i>
+              <div><strong>护理等级</strong><span>确认创面、中风、术后恢复是否在当前接待边界内。</span></div>
+            </div>
+            <div class="confirm-item">
+              <i data-lucide="receipt-text"></i>
+              <div><strong>价格 / 退改</strong><span>确认最终报价、包含项和退改规则，避免临时变动。</span></div>
+            </div>
+            <div class="confirm-item">
+              <i data-lucide="ambulance"></i>
+              <div><strong>医疗距离</strong><span>确认附近医院和陪诊能力，特别适合出院过渡和高照护家庭。</span></div>
+            </div>
+            <div class="confirm-item">
+              <i data-lucide="users-round"></i>
+              <div><strong>同行结构</strong><span>拼团前确认人数、作息偏好和是否需要平台继续补招。</span></div>
+            </div>
+          </div>
+          <button class="btn subtle" id="pathCare"><i data-lucide="clipboard-check"></i>看护理院接待能力</button>
+        </article>
+
+        <article class="pitch-card">
+          <div class="eyebrow">机构愿意加入</div>
+          <h3>把空床位和淡季团期，变成更容易成交的短住订单</h3>
+          <div class="pitch-list">
+            <div>
+              <strong>空置库存转化</strong>
+              <span>3-30 天短住补足淡季入住率，适合康复院、旅居公寓和照护型机构。</span>
+            </div>
+            <div>
+              <strong>先筛再锁床</strong>
+              <span>平台顾问先做需求分流，减少机构重复沟通和无效接待。</span>
+            </div>
+            <div>
+              <strong>收入结构清晰</strong>
+              <span>可做短住服务费、团期运营费、渠道撮合费等多层收费。</span>
+            </div>
+          </div>
+          <div class="business-tags">
+            <span class="tag">短住服务费</span>
+            <span class="tag">团期运营费</span>
+            <span class="tag">渠道撮合费</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="ai-result-band" id="aiResultSection" aria-label="AI 初筛结果" hidden>
+        <div class="topbar">
+          <div>
+            <div class="eyebrow" id="aiResultEyebrow">AI 顾问初筛结果</div>
+            <h2 id="aiResultTitle">先告诉 AI 老人的情况，再给出 2-3 个优先推荐</h2>
+            <p id="aiResultSummary">系统会按护理能力、床位余量、医疗距离、团期和平台规则给出优先建议，再交给顾问复核。</p>
+          </div>
+          <div class="top-actions">
+            <button class="btn subtle" id="aiResultAdvisor"><i data-lucide="headphones"></i>顾问复核</button>
+          </div>
         </div>
-        <div class="metric">
-          <div class="metric-icon"><i data-lucide="map-pin"></i></div>
-          <div><span>覆盖城市</span><strong>12</strong></div>
-        </div>
-        <div class="metric">
-          <div class="metric-icon"><i data-lucide="users-round"></i></div>
-          <div><span>本周拼团</span><strong>18</strong></div>
-        </div>
-        <div class="metric">
-          <div class="metric-icon"><i data-lucide="bed-double"></i></div>
-          <div><span>可锁床位</span><strong>236</strong></div>
+        <div class="match-panel">
+          <div class="match-summary">
+            <div>
+              <h3 id="aiResultFocus">当前识别重点</h3>
+              <p id="aiResultFocusText">等待输入</p>
+            </div>
+            <div class="match-checklist" id="aiResultChecklist"></div>
+            <div class="match-signals" id="aiResultSignals"></div>
+          </div>
+          <div class="match-cards" id="aiResultCards"></div>
         </div>
       </section>
 
-      <section class="pathways" aria-label="业务主线">
-        <article class="path-card">
-          <div>
-            <h3>主线一：拼团旅居</h3>
-            <p>老人从平台已上架项目里发起同伴拼团，平台锁定机构、价格、团期和服务边界。</p>
-          </div>
-          <button class="path-icon" id="pathGroup" aria-label="查看拼团主线"><i data-lucide="users-round"></i></button>
-        </article>
-        <article class="path-card">
-          <div>
-            <h3>主线二：护理院自主选择</h3>
-            <p>用户按机构介绍、剩余床位、床位费、护理费和医疗便利性自主选择并预约。</p>
-          </div>
-          <button class="path-icon" id="pathCare" aria-label="查看自主选院主线"><i data-lucide="building-2"></i></button>
-        </article>
+      <section class="metrics" aria-label="平台数据">
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="badge-check"></i></div>
+          <div><span>已上架短住项目</span><strong>42</strong></div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="map-pin"></i></div>
+          <div><span>合作城市</span><strong>12</strong></div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="users-round"></i></div>
+          <div><span>本周待确认需求</span><strong>18</strong></div>
+        </div>
+        <div class="metric">
+          <div class="metric-icon"><i data-lucide="bed-double"></i></div>
+          <div><span>可锁短住床位</span><strong>236</strong></div>
+        </div>
       </section>
 
       <div class="layout">
@@ -2994,9 +3381,19 @@
     const actionTitle = document.getElementById("actionTitle");
     const actionSubtitle = document.getElementById("actionSubtitle");
     const actionContent = document.getElementById("actionContent");
+    const aiResultSection = document.getElementById("aiResultSection");
+    const aiResultEyebrow = document.getElementById("aiResultEyebrow");
+    const aiResultTitle = document.getElementById("aiResultTitle");
+    const aiResultSummary = document.getElementById("aiResultSummary");
+    const aiResultFocus = document.getElementById("aiResultFocus");
+    const aiResultFocusText = document.getElementById("aiResultFocusText");
+    const aiResultChecklist = document.getElementById("aiResultChecklist");
+    const aiResultSignals = document.getElementById("aiResultSignals");
+    const aiResultCards = document.getElementById("aiResultCards");
     let detailGallery = [];
     let detailGalleryAlt = "";
     let detailGalleryIndex = 0;
+    let aiResultState = null;
 
     function money(value) {
       return "¥" + value.toLocaleString("zh-CN");
@@ -4163,6 +4560,283 @@
       return "全部";
     }
 
+    function includesText(source, keyword) {
+      return keyword && source.includes(keyword);
+    }
+
+    function getInstitutionSpecialtyMatch(item, careFilter, needText) {
+      const normalized = careFilter
+        .replace("护理", "")
+        .replace("照护", "")
+        .replace("短住", "")
+        .replace("试住", "");
+      return item.specialties.find(specialty => (
+        includesText(specialty.name, normalized)
+        || includesText(specialty.desc, normalized)
+        || includesText(`${specialty.name}${specialty.desc}`, needText)
+      ));
+    }
+
+    function scoreInstitutionForNeed(item, careFilter, keyword, needText) {
+      let score = item.bedsLeft;
+      const haystack = [
+        item.name,
+        item.city,
+        item.type,
+        item.intro,
+        item.care,
+        item.specialties.map(specialty => `${specialty.name}${specialty.desc}`).join("")
+      ].join("");
+
+      if (careFilter !== "全部照护" && (haystack.includes(careFilter) || getInstitutionSpecialtyMatch(item, careFilter, needText))) {
+        score += 18;
+      }
+      if (keyword && haystack.includes(keyword)) {
+        score += 8;
+      }
+      if (/出院|术后|康复/.test(needText) && /术后|康复|恢复/.test(haystack)) {
+        score += 6;
+      }
+      if (/夜间|巡房|喘息/.test(needText) && /夜间|巡房|喘息/.test(haystack)) {
+        score += 4;
+      }
+      if (/家属|反馈|同步/.test(needText) && /家属|反馈/.test(haystack)) {
+        score += 3;
+      }
+      return score;
+    }
+
+    function scoreProjectForNeed(project, projectFilter, keyword, needText) {
+      let score = project.beds;
+      const haystack = [
+        project.title,
+        project.city,
+        project.institution,
+        project.category,
+        project.intro,
+        project.care,
+        project.tags.join("")
+      ].join("");
+
+      if (projectFilter !== "全部" && project.category === projectFilter) {
+        score += 16;
+      }
+      if (keyword && haystack.includes(keyword)) {
+        score += 8;
+      }
+      if (/自理|轻照护/.test(needText) && /自理|轻照护/.test(project.care)) {
+        score += 5;
+      }
+      if (/月住|长住|候鸟/.test(needText) && /月住|长周期|候鸟/.test(haystack)) {
+        score += 5;
+      }
+      if (/同伴|一起|拼房|拼团/.test(needText)) {
+        score += 4;
+      }
+      return score;
+    }
+
+    function getCareRiskNote(careFilter) {
+      switch (careFilter) {
+        case "创面护理":
+          return "需确认是否已进入稳定期、换药频次和感染风险提示，再确认最终报价。";
+        case "中风后照护":
+          return "需确认吞咽、移位和夜间风险等级，再安排接待班次。";
+        case "骨科恢复":
+          return "需确认术后天数、是否能下地和康复训练衔接强度。";
+        case "半自理短住":
+          return "需确认夜间协助、如厕频次和家属陪护边界。";
+        default:
+          return "需由平台复核护理等级、床位和最终费用。";
+      }
+    }
+
+    function getProjectRiskNote(projectFilter) {
+      switch (projectFilter) {
+        case "避暑":
+        case "避寒":
+          return "需确认最终床位、同伴结构和出发前的退改规则。";
+        case "试住":
+          return "需确认体验天数、可否续住和长住转化规则。";
+        default:
+          return "需确认团期是否锁定、同行成员结构和服务边界。";
+      }
+    }
+
+    function buildCareAiResult(needText, keyword) {
+      const careFilter = activeCareFilter;
+      const ranked = institutions
+        .map(item => ({ item, score: scoreInstitutionForNeed(item, careFilter, keyword, needText) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+
+      return {
+        mode: "care",
+        eyebrow: "AI 顾问初筛结果",
+        title: `优先推荐 ${ranked.length} 家可继续确认的机构`,
+        summary: "先用护理能力、床位余量和医疗距离做第一轮筛选，再由顾问复核护理等级和最终报价。",
+        focusTitle: `已识别为 ${careFilter}`,
+        focusText: keyword
+          ? `已结合 ${keyword} 与 ${careFilter} 场景，优先给出更适合继续确认的短住机构。`
+          : `已按 ${careFilter} 场景做第一轮筛选，重点看能不能接、还有没有床、离医院远不远。`,
+        signals: [
+          `场景：${careFilter}`,
+          keyword ? `城市：${keyword}` : "城市：可跨城筛选",
+          "规则：护理能力 > 床位余量 > 医疗距离"
+        ],
+        checklist: [
+          { icon: "shield-check", title: "为什么先推这些", desc: "优先看是否明确写出接待能力，再看剩余床位和离医院远近。" },
+          { icon: "phone-call", title: "顾问下一步要做什么", desc: "继续确认护理等级、价格拆分、换药或夜间照护安排。" }
+        ],
+        cards: ranked.map(({ item }, index) => {
+          const specialty = getInstitutionSpecialtyMatch(item, careFilter, needText) || item.specialties[0];
+          const reasons = [
+            specialty ? `${specialty.name}：${specialty.desc}` : `接待范围覆盖 ${item.care} 场景。`,
+            `${item.bedsLeft}/${item.totalBeds} 床可继续确认，适合短住匹配。`,
+            `${item.hospital}，方便家属关注医疗可达性。`
+          ];
+          if (keyword && item.city.includes(keyword)) {
+            reasons.unshift(`位置匹配：位于 ${item.city}，更符合当前意向城市。`);
+          }
+
+          return {
+            id: item.id,
+            badge: item.type,
+            title: item.name,
+            intro: item.intro,
+            facts: [
+              ["剩余床位", `${item.bedsLeft} 床`],
+              ["预计日费", `${money(dailyPrice(item))}/天起`],
+              ["重点能力", specialty ? specialty.name : item.care]
+            ],
+            reasons: reasons.slice(0, 3),
+            risk: getCareRiskNote(careFilter),
+            primaryLabel: index === 0 ? "预约确认床位" : "继续确认"
+          };
+        })
+      };
+    }
+
+    function buildProjectAiResult(needText, keyword) {
+      const projectFilter = activeFilter;
+      const ranked = projects
+        .map(project => ({ project, score: scoreProjectForNeed(project, projectFilter, keyword, needText) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+
+      return {
+        mode: "project",
+        eyebrow: "AI 拼团初筛结果",
+        title: `优先推荐 ${ranked.length} 个可发起的旅居项目`,
+        summary: "先按团期、床位、接待边界和拼团可执行性筛一轮，再由平台确认最终锁房和招募方式。",
+        focusTitle: projectFilter === "全部" ? "已识别为旅居拼团需求" : `已识别为 ${projectFilter} 拼团需求`,
+        focusText: keyword
+          ? `已结合 ${keyword} 与 ${projectFilter} 需求，优先给出更容易发起的旅居项目。`
+          : "已按团期、床位和适合的照护边界给出第一轮拼团推荐。",
+        signals: [
+          projectFilter === "全部" ? "场景：同伴拼团" : `场景：${projectFilter}`,
+          keyword ? `偏好地：${keyword}` : "偏好地：可跨城发起",
+          "规则：团期 > 床位 > 服务边界"
+        ],
+        checklist: [
+          { icon: "calendar-clock", title: "为什么先推这些", desc: "优先看最近可发起团期、剩余床位和是否适合当前照护强度。" },
+          { icon: "lock-keyhole", title: "平台下一步要做什么", desc: "继续确认锁房、价格、退改和是否需要平台继续补招成员。" }
+        ],
+        cards: ranked.map(({ project }, index) => {
+          const reasons = [
+            `最近可发起 ${project.dates[0]}，更适合尽快组团出发。`,
+            `${project.beds} 床可锁定，团期库存更友好。`,
+            `${project.care} 可接待范围更接近当前意向人群。`
+          ];
+          if (keyword && (project.city.includes(keyword) || project.title.includes(keyword))) {
+            reasons.unshift(`位置匹配：${project.city} 更贴近当前出行偏好。`);
+          }
+
+          return {
+            id: project.id,
+            badge: `${project.category} · ${project.duration} 天`,
+            title: project.title,
+            intro: project.intro,
+            facts: [
+              ["最近团期", project.dates[0]],
+              ["平台价格", `${money(project.price)} 起`],
+              ["成团人数", `${project.minGroup}-${project.maxGroup} 人`]
+            ],
+            reasons: reasons.slice(0, 3),
+            risk: getProjectRiskNote(projectFilter),
+            primaryLabel: "发起拼团"
+          };
+        })
+      };
+    }
+
+    function renderAiResult(result) {
+      aiResultState = result;
+      aiResultSection.hidden = false;
+      aiResultEyebrow.textContent = result.eyebrow;
+      aiResultTitle.textContent = result.title;
+      aiResultSummary.textContent = result.summary;
+      aiResultFocus.textContent = result.focusTitle;
+      aiResultFocusText.textContent = result.focusText;
+      aiResultChecklist.innerHTML = result.checklist.map(item => `
+        <div class="match-check">
+          ${icon(item.icon)}
+          <div>
+            <strong>${item.title}</strong>
+            <span>${item.desc}</span>
+          </div>
+        </div>
+      `).join("");
+      aiResultSignals.innerHTML = result.signals.map(text => `
+        <span class="match-signal">${icon("sparkles")}${text}</span>
+      `).join("");
+      aiResultCards.innerHTML = result.cards.map((card, index) => `
+        <article class="match-card">
+          <div class="match-card-head">
+            <span class="badge">${icon("sparkles")}优先推荐 ${index + 1}</span>
+            <span class="status-chip">${card.badge}</span>
+          </div>
+          <div>
+            <h4>${card.title}</h4>
+            <p class="intro">${card.intro}</p>
+          </div>
+          <div class="decision-grid">
+            ${card.facts.map(([label, value]) => decision(label, value)).join("")}
+          </div>
+          <ul class="reason-list">
+            ${card.reasons.map(reason => `<li>${reason}</li>`).join("")}
+          </ul>
+          <div class="risk-note"><strong>需二次确认：</strong>${card.risk}</div>
+          <div class="group-actions">
+            <button class="btn ghost" type="button" data-ai-open-detail="${card.id}" data-ai-mode="${result.mode}">${icon("info")}看详情</button>
+            <button class="btn primary" type="button" data-ai-open-action="${card.id}" data-ai-mode="${result.mode}">${icon(result.mode === "care" ? "calendar-plus" : "users-round")}${card.primaryLabel}</button>
+          </div>
+        </article>
+      `).join("");
+
+      aiResultCards.querySelectorAll("[data-ai-open-detail]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (button.dataset.aiMode === "care") {
+            openInstitutionDetail(button.dataset.aiOpenDetail);
+            return;
+          }
+          openProjectDetail(button.dataset.aiOpenDetail);
+        });
+      });
+
+      aiResultCards.querySelectorAll("[data-ai-open-action]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (button.dataset.aiMode === "care") {
+            openBookingModal(button.dataset.aiOpenAction);
+            return;
+          }
+          openLaunchModal(button.dataset.aiOpenAction);
+        });
+      });
+
+      refreshIcons();
+    }
+
     function runAiMatch() {
       const input = document.getElementById("aiNeedInput");
       const needText = input.value.trim();
@@ -4180,7 +4854,8 @@
         activeFilter = inferProjectFilter(needText);
         renderFilters();
         renderProjects();
-        document.getElementById("projectGrid").scrollIntoView({ behavior: "smooth", block: "start" });
+        renderAiResult(buildProjectAiResult(needText, keyword));
+        aiResultSection.scrollIntoView({ behavior: "smooth", block: "start" });
         showToast(keyword ? `AI 已识别 ${keyword} · ${activeFilter}，筛出可发起项目。` : "AI 已按旅居拼团需求筛出平台已上架项目。");
         return;
       }
@@ -4190,7 +4865,8 @@
       activeCareFilter = inferCareFilter(needText);
       renderCareFilters();
       renderInstitutions();
-      document.getElementById("institutionsSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      renderAiResult(buildCareAiResult(needText, keyword));
+      aiResultSection.scrollIntoView({ behavior: "smooth", block: "start" });
       showToast(keyword ? `AI 已识别 ${keyword} · ${activeCareFilter}，优先展示可接收机构。` : `AI 已识别为 ${activeCareFilter}，优先展示可接收机构。`);
     }
 
@@ -4331,6 +5007,10 @@
     });
 
     document.getElementById("navMatchCare").addEventListener("click", () => {
+      openAdvisorModal();
+    });
+
+    document.getElementById("aiResultAdvisor").addEventListener("click", () => {
       openAdvisorModal();
     });
 
